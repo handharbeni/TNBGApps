@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">TNBGApps</string>
+    <string name="placeholder_tanggal">Senin, 1 Agustus 2017 00.00 WIB</string>
+    <string name="placeholder_title">Your Title Will Be Here</string>
+    <string name="placeholder_status">On Develop</string>
+    <string name="placeholder_frontcontent">Sejak kasus pelecehan seksual yang terjadi pada anaknya. Ibu M kerap kali menerima banyak intimidasi, terror,fitnahan bahkan ia sampai dinyatakan ingin mencari sensasi dengan memblow up kasus anaknya yang telah dinodai oleh seorang PNS</string>
+    <string name="placeholder_backcontent">Sejak kasus pelecehan seksual yang terjadi pada anaknya. Ibu M kerap kali menerima banyak intimidasi, terror,fitnahan bahkan ia sampai dinyatakan ingin mencari sensasi dengan memblow up kasus anaknya yang telah dinodai oleh seorang PNS, Sejak kasus pelecehan seksual yang terjadi pada anaknya. Ibu M kerap kali menerima banyak intimidasi, terror,fitnahan bahkan ia sampai dinyatakan ingin mencari sensasi dengan memblow up kasus anaknya yang telah dinodai oleh seorang PNS</string>
+    <string name="placeholder_comment">Comment</string>
+    <string name="placeholder_like">Like</string>
+    <string name="placeholder_onprogress">On Progress</string>
+    <string name="placeholder_subscribe">Subscribe</string>
+    <string name="placeholder_trending">#trending</string>
+    <string name="title_activity_navigation">NavigationActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+</resources>

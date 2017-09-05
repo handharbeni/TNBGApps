@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="20dp"
+    android:layout_height="wrap_content">
+    <TextView
+        android:textColor="#33C6A0"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:id="@+id/trending"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/placeholder_trending"/>
+    <TextView
+        android:id="@+id/penggunatrending"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1 Pengguna"/>
+
+</LinearLayout>

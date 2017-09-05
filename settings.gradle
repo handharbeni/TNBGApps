@@ -1,0 +1,1 @@
+include ':app', ':sessionlibrary', ':databasemodule', ':realmlibrary', ':networklibrary'

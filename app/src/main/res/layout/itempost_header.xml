@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/paddingitem">
+    <TextView
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:id="@+id/tanggal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/placeholder_tanggal" />
+
+    <TextView
+        android:textColor="@color/textWhite"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/status"
+        android:background="@drawable/roundcorner_onprogress"
+        android:textSize="@dimen/fontsizetag"
+        android:padding="@dimen/paddingtag"
+        android:text="@string/placeholder_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

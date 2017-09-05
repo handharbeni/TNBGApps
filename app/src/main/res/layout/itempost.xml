@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content" android:layout_margin="@dimen/marginpost">
+    <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
+        <include layout="@layout/itempost_header" android:id="@+id/headerpost"/>
+        <include layout="@layout/itempost_content" android:id="@+id/contentpost"/>
+        <include layout="@layout/itempost_commentlike"/>
+    </LinearLayout>
+</android.support.v7.widget.CardView>
