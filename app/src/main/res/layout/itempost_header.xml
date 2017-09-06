@@ -5,14 +5,14 @@
     android:padding="@dimen/paddingitem">
     <TextView
         android:gravity="center"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/textBlack"
         android:id="@+id/tanggal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/placeholder_tanggal" />
 
     <TextView
-        android:textColor="@color/textWhite"
+        android:textColor="@color/textBlack"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/status"

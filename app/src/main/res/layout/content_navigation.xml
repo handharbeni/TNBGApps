@@ -8,6 +8,5 @@
     tools:context="illiyin.mhandharbeni.tnbgapps.NavigationActivity"
     tools:showIn="@layout/app_bar_navigation">
     <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/mainframe">
-
     </FrameLayout>
 </android.support.constraint.ConstraintLayout>

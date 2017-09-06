@@ -1,1 +1,8 @@
-<resources></resources>
+<resources>
+
+    <style name="AppTheme.SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="android:queryBackground">@color/greyCustom</item>
+        <!--        <item name="queryBackground">...</item>
+                <item name="submitBackground">...</item>-->
+    </style>
+</resources>
