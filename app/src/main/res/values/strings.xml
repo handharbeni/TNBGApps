@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">TNBGApps</string>
     <string name="placeholder_tanggal">Senin, 1 Agustus 2017 00.00 WIB</string>
-    <string name="placeholder_title">Your Title Will Be Here</string>
+    <string name="placeholder_title">Bapak Penjual Pulsa di Surabaya</string>
     <string name="placeholder_status">On Develop</string>
-    <string name="placeholder_frontcontent">Sejak kasus pelecehan seksual yang terjadi pada anaknya. Ibu M kerap kali menerima banyak intimidasi, terror,fitnahan bahkan ia sampai dinyatakan ingin mencari sensasi dengan memblow up kasus anaknya yang telah dinodai oleh seorang PNS</string>
+    <string name="placeholder_frontcontent">Seorang follower mengirimkan DM dan melaporkan  ahwa ia menemukan seorang bapak penjual pulsa. Bapak tersebut memiliki keterbatasan, namun dia tetap semangat dalam mencari rejeki dengan berjualan</string>
     <string name="placeholder_backcontent">Sejak kasus pelecehan seksual yang terjadi pada anaknya. Ibu M kerap kali menerima banyak intimidasi, terror,fitnahan bahkan ia sampai dinyatakan ingin mencari sensasi dengan memblow up kasus anaknya yang telah dinodai oleh seorang PNS, Sejak kasus pelecehan seksual yang terjadi pada anaknya. Ibu M kerap kali menerima banyak intimidasi, terror,fitnahan bahkan ia sampai dinyatakan ingin mencari sensasi dengan memblow up kasus anaknya yang telah dinodai oleh seorang PNS</string>
     <string name="placeholder_comment">Comment</string>
     <string name="placeholder_like">Like</string>
@@ -11,6 +11,18 @@
     <string name="placeholder_subscribe">Subscribe</string>
     <string name="placeholder_trending">#trending</string>
     <string name="placeholder_cariberita">Search News</string>
+    <string name="placeholder_kontak">Jika anda punya berita yang ingin di post atau berita yang ingin orang lain ketahui sebagai pelajaran, info atau lainnya. Silakan kirim email ke <p>lapor@tnbg.news</p><br/><br/>Untuk permasalahan mengenai website, <p>silakan email ke admin@tnbg.news</p></string>
+    <string name="placeholder_username">Username</string>
+    <string name="placeholder_notelp">No Telepon</string>
+    <string name="placeholder_oldpassword">Password Lama</string>
+    <string name="placeholder_password">Password</string>
+    <string name="placeholder_changepassword">Ganti Password</string>
+    <string name="placeholder_repeatpassword">Ulangi Password</string>
+    <string name="placeholder_signoutnow">Tidak punya akun? Daftar Disini</string>
+    <string name="placeholder_signinnow">Sudah punya akun? Login Disini</string>
+    <string name="placeholder_signin">Masuk</string>
+    <string name="placeholder_signout">Daftar</string>
+
     <string name="title_activity_navigation">NavigationActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -18,4 +30,9 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
+
+    <string name="comment">Comment</string>
+    <string name="like">Like</string>
+    <string name="subscribe">Subscribe</string>
+
 </resources>

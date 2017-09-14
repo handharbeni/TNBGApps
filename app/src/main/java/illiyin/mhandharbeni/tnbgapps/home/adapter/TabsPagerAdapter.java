@@ -3,6 +3,7 @@ package illiyin.mhandharbeni.tnbgapps.home.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 import illiyin.mhandharbeni.tnbgapps.home.fragment.ArsipFragment;
 import illiyin.mhandharbeni.tnbgapps.home.fragment.HomeFragment;
@@ -33,7 +34,12 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
                 return new ArsipFragment();
         }
 
-        return null;
+        return new HomeFragment();
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        super.destroyItem(container, position, object);
     }
 
     @Override

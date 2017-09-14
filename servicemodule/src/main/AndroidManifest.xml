@@ -1,0 +1,14 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
+    package="illiyin.mhandharbeni.servicemodule">
+
+    <application android:allowBackup="true" android:label="@string/app_name"
+        android:supportsRtl="true">
+        <service android:name=".service.MainService"/>
+        <service android:name=".service.intentservice.NewsService"/>
+        <service android:name=".service.intentservice.OutletService"/>
+        <service android:name=".service.intentservice.OrderService"/>
+        <service android:name=".service.intentservice.TrackingService"/>
+    </application>
+
+</manifest>

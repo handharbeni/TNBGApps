@@ -4,7 +4,10 @@
     android:padding="10dp"
     android:layout_height="wrap_content">
     <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:id="@+id/thumbnail"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:maxWidth="80dp"
+        android:maxHeight="80dp"
         android:src="@drawable/placeholder_imagetitle"/>
 </RelativeLayout>

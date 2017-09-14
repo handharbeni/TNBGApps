@@ -1,10 +1,5 @@
 <resources>
     <string name="app_name">DatabaseModule</string>
-    <string name="module_server">http://burgertahumalang.com/dev/api/</string>
-    <string name="endpointmenu">/users/menu?token=</string>
-    <string name="endpointoutlet">/public/list?type=outlet&amp;access=true</string>
-    <string name="endpointresto"></string>
-    <string name="endpointkurir">/users/tracking</string>
-    <string name="endpointorder">/users/order?token=</string>
-    <string name="endpointfeedeliv">/public/tools_value?access=true</string>
+    <string name="module_server">https://api.tnbg.news/</string>
+
 </resources>

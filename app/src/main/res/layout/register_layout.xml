@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/paddingitem" android:paddingRight="@dimen/paddingitem" android:paddingTop="@dimen/paddingitem">
+    <EditText
+        android:layout_marginTop="@dimen/paddingitem"
+        android:singleLine="true"
+        android:id="@+id/username"
+        android:hint="@string/placeholder_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:layout_marginTop="@dimen/paddingitem"
+        android:singleLine="true"
+        android:id="@+id/notelp"
+        android:hint="@string/placeholder_notelp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:layout_marginTop="@dimen/paddingitem"
+        android:singleLine="true"
+        android:id="@+id/password"
+        android:hint="@string/placeholder_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:layout_marginTop="@dimen/paddingitem"
+        android:singleLine="true"
+        android:id="@+id/repeatpassword"
+        android:hint="@string/placeholder_repeatpassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/signout"
+        android:layout_marginTop="@dimen/paddingitem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/placeholder_signout"/>
+    <TextView
+        android:id="@+id/dosignin"
+        android:paddingTop="@dimen/paddingitem"
+        android:paddingBottom="@dimen/paddingitem"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/placeholder_signinnow"/>
+</LinearLayout>

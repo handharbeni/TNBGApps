@@ -2,11 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <ImageView
-        android:scaleType="centerCrop"
+    <illiyin.mhandharbeni.tnbgapps.utils.TopAlignedImageView
+        android:scaleType="matrix"
         android:id="@+id/imagetitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="160dp"
+        android:maxHeight="160dp"
         android:src="@drawable/placeholder_imagetitle"/>
     <TextView
         android:padding="@dimen/paddingtitle"

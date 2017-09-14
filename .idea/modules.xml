@@ -7,7 +7,9 @@
       <module fileurl="file://$PROJECT_DIR$/databasemodule/databasemodule.iml" filepath="$PROJECT_DIR$/databasemodule/databasemodule.iml" />
       <module fileurl="file://$PROJECT_DIR$/networklibrary/networklibrary.iml" filepath="$PROJECT_DIR$/networklibrary/networklibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/realmlibrary/realmlibrary.iml" filepath="$PROJECT_DIR$/realmlibrary/realmlibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/servicemodule/servicemodule.iml" filepath="$PROJECT_DIR$/servicemodule/servicemodule.iml" />
       <module fileurl="file://$PROJECT_DIR$/sessionlibrary/sessionlibrary.iml" filepath="$PROJECT_DIR$/sessionlibrary/sessionlibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/utilslibrary/utilslibrary.iml" filepath="$PROJECT_DIR$/utilslibrary/utilslibrary.iml" />
     </modules>
   </component>
 </project>

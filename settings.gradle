@@ -1,1 +1,1 @@
-include ':app', ':sessionlibrary', ':databasemodule', ':realmlibrary', ':networklibrary'
+include ':app', ':sessionlibrary', ':databasemodule', ':realmlibrary', ':networklibrary', ':servicemodule', ':utilslibrary'
