@@ -2,6 +2,7 @@ package illiyin.mhandharbeni.tnbgapps;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -41,6 +42,7 @@ public class NavigationActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         init_serviceadapter();
         setContentView(R.layout.activity_navigation);
 

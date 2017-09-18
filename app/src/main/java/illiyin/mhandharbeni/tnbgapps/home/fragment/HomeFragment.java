@@ -4,32 +4,30 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.github.ybq.endless.Endless;
-import com.paginate.Paginate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
+import illiyin.mhandharbeni.databasemodule.AdapterModel;
 import illiyin.mhandharbeni.databasemodule.NewsModel;
 import illiyin.mhandharbeni.realmlibrary.Crud;
 import illiyin.mhandharbeni.tnbgapps.R;
 import illiyin.mhandharbeni.tnbgapps.home.adapter.HomeAdapter;
-import io.realm.RealmObject;
 import io.realm.RealmResults;
 
 import static android.content.ContentValues.TAG;
@@ -38,7 +36,7 @@ import static android.content.ContentValues.TAG;
  * Created by root on 9/5/17.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
     private View v;
     private NewsModel newsModel;
     private Crud crud;
@@ -46,6 +44,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView rvnews;
     private HomeAdapter homeadapter;
     private Endless endless;
+    private SwipeRefreshLayout swiperefreshlayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,18 +54,20 @@ public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        getActivity().registerReceiver(this.receiver, new IntentFilter("UPDATE NEWS"));
         newsModel = new NewsModel();
         crud = new Crud(getActivity().getApplicationContext(), newsModel);
         v = inflater.inflate(R.layout._layout_fragmenthome, container, false);
         rvnews = v.findViewById(R.id.rvnews);
-//        setDummyData();
+        swiperefreshlayout = v.findViewById(R.id.swiperefreshlayout);
+        swiperefreshlayout.setOnRefreshListener(this);
         init_list();
         init_adapter();
         init_paginate();
         return v;
     }
     private void init_paginate(){
-        View loadingView = View.inflate(getActivity().getApplicationContext(), R.layout.loading_layout, null);
+        final View loadingView = View.inflate(getActivity().getApplicationContext(), R.layout.loading_layout, null);
         loadingView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         endless = Endless.applyTo(rvnews,
                 loadingView
@@ -75,7 +76,16 @@ public class HomeFragment extends Fragment {
         endless.setLoadMoreListener(new Endless.LoadMoreListener() {
             @Override
             public void onLoadMore(int page) {
-                Toast.makeText(getActivity().getApplicationContext(), "Page "+String.valueOf(page), Toast.LENGTH_SHORT).show();
+                AsyncTask<String, Integer, Boolean> ShowPage = new ShowPage().execute("https://api.tnbg.news/api/posts?limit=10&page="+String.valueOf(page));
+                try {
+                    if (ShowPage.get()){
+                        endless.loadMoreComplete();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -120,23 +130,47 @@ public class HomeFragment extends Fragment {
     }
     private void update_adapter(){
         init_list();
-        homeadapter = new HomeAdapter(getActivity().getApplicationContext(), newsList);
-        homeadapter.notifyDataSetChanged();
+        if (homeadapter != null){
+            homeadapter = new HomeAdapter(getActivity().getApplicationContext(), newsList);
+            homeadapter.notifyDataSetChanged();
+        }
     }
     @Override
     public void onPause() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(receiver);
         super.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        getActivity().registerReceiver(this.receiver, new IntentFilter("UPDATE NEWS"));
+    }
+
+    @Override
+    public void onStop() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(receiver);
+        super.onStop();
     }
 
     @Override
     public void onDestroy() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(receiver);
         super.onDestroy();
     }
+
+    @Override
+    public void onDestroyView() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(receiver);
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getActivity().registerReceiver(this.receiver, new IntentFilter("UPDATE NEWS"));
+    }
+
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -149,8 +183,40 @@ public class HomeFragment extends Fragment {
                 default:
                     break;
             }
-
-
         }
     };
+
+    @Override
+    public void onRefresh() {
+        AsyncTask<String, Integer, Boolean> ReloadData = new ReloadData().execute("https://api.tnbg.news/api/posts?limit=10&page=1");
+        try {
+            if (ReloadData.get()){
+                swiperefreshlayout.setRefreshing(false);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+    private class ReloadData extends AsyncTask<String, Integer, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            Log.d(TAG, "doInBackground: Execute"+strings[0]);
+            AdapterModel adapterModel = new AdapterModel(getActivity().getBaseContext());
+            Boolean returns = adapterModel.syncNews(strings[0]);
+            return returns;
+        }
+    }
+    private class ShowPage extends AsyncTask<String, Integer, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            Log.d(TAG, "doInBackground: Execute"+strings[0]);
+            AdapterModel adapterModel = new AdapterModel(getActivity().getBaseContext());
+            Boolean returns = adapterModel.syncNews(strings[0]);
+            return returns;
+        }
+    }
 }
