@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/komentar"/>
     <TextView
+        android:textColor="@color/textBlack"
         android:id="@+id/text_comment"
         android:gravity="center_vertical"
         android:layout_width="match_parent"

@@ -10,12 +10,14 @@
         android:maxHeight="160dp"
         android:src="@drawable/placeholder_imagetitle"/>
     <TextView
+        android:textColor="@color/textBlack"
         android:padding="@dimen/paddingtitle"
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/placeholder_title"/>
     <TextView
+        android:textColor="@color/textBlack"
         android:padding="@dimen/paddingfrontcontent"
         android:id="@+id/frontcontent"
         android:layout_width="match_parent"

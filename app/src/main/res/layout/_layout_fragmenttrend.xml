@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:padding="@dimen/paddingitem">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <android.support.v7.widget.CardView
+        android:layout_margin="@dimen/paddingitem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" android:padding="@dimen/paddingtitle">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvtrending"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
+                app:rrvIsRefreshable="true"
+                app:rrvLayoutType="LinearLayout"
+                android:id="@+id/rvtrending"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        </android.support.v7.widget.RecyclerView>
+            </co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

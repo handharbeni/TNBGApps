@@ -7,52 +7,49 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 import illiyin.mhandharbeni.databasemodule.TrendingModel;
 import illiyin.mhandharbeni.tnbgapps.R;
+import io.realm.RealmBasedRecyclerViewAdapter;
+import io.realm.RealmResults;
+import io.realm.RealmViewHolder;
 
 /**
  * Created by root on 9/13/17.
  */
 
-public class TrendingAdapter extends RecyclerView.Adapter<TrendingAdapter.MyViewHolder> {
-    private Context mContext;
-    private List<TrendingModel> trendingList;
+public class TrendingAdapter extends RealmBasedRecyclerViewAdapter<TrendingModel, TrendingAdapter.ViewHolder> {
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView trending, penggunatrending;
 
-        public MyViewHolder(View view) {
-            super(view);
-            trending = view.findViewById(R.id.trending);
-            penggunatrending = view.findViewById(R.id.penggunatrending);
+    public TrendingAdapter(Context context, RealmResults<TrendingModel> realmResults, boolean automaticUpdate) {
+        super(context, realmResults, automaticUpdate, false);
+    }
+
+    public class ViewHolder extends RealmViewHolder {
+
+        public TextView trending, penggunatrending;
+        public ViewHolder(LinearLayout container) {
+            super(container);
+            this.trending = container.findViewById(R.id.trending);
+            penggunatrending = container.findViewById(R.id.penggunatrending);
         }
     }
-    public TrendingAdapter(Context mContext, List<TrendingModel> trendingList){
-        this.mContext = mContext;
-        this.trendingList = trendingList;
-    }
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    public void onBindViewHolder(final TrendingAdapter.MyViewHolder h, int position) {
-        final TrendingModel m = this.trendingList.get(position);
-        h.trending.setText(m.getName());
-        h.penggunatrending.setText(m.getCount()+" Pengguna");
 
-    }
     @Override
-    public int getItemCount() {
-        return this.trendingList.size();
+    public TrendingAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
+        View v = inflater.inflate(R.layout.itemtrending, viewGroup, false);
+        return new ViewHolder((LinearLayout) v);
     }
 
     @Override
-    public TrendingAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.itemtrending ,parent, false);
-        return new TrendingAdapter.MyViewHolder(v);
+    public void onBindRealmViewHolder(TrendingAdapter.ViewHolder myViewHolder, int i) {
+        TrendingModel trendingModel = realmResults.get(i);
+        myViewHolder.trending.setText("#"+trendingModel.getName());
+        myViewHolder.penggunatrending.setText(trendingModel.getCount()+" Pengguna");
     }
-
 }

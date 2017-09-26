@@ -18,7 +18,7 @@ public class Session implements EncryptedPreferences.OnSharedPreferenceChangeLis
             ALAMAT = "ALAMAT",
             NOTELP = "NOTELP",
             EMAIL = "EMAIL",
-            KEY = "KEY",
+            KEY = "TOKEN",
             STATUS = "STATUS",
             CONNECTION = "CONNECTION";
     Context context;
@@ -29,6 +29,12 @@ public class Session implements EncryptedPreferences.OnSharedPreferenceChangeLis
                 .withEncryptionPassword(this.context.getString(R.string.password)).build();
         encryptedPreferences.registerOnSharedPreferenceChangeListener(this);
         this.sessionListener = sessionListener;
+    }
+    public String encryptedString(String value){
+        return encryptedPreferences.getUtils().encryptStringValue(value);
+    }
+    public String decryptString(String value){
+        return encryptedPreferences.getUtils().decryptStringValue(value);
     }
     public String getToken(){
         return encryptedPreferences.getUtils().decryptStringValue(encryptedPreferences.getString(KEY, defaultKey));
@@ -85,14 +91,11 @@ public class Session implements EncryptedPreferences.OnSharedPreferenceChangeLis
                 .apply();
     }
     public Boolean checkSession(){
-        Log.d(TAG, "checkSession: "+encryptedPreferences.getUtils().decryptStringValue(encryptedPreferences.getString(KEY, defaultKey)));
-        if (encryptedPreferences.getUtils().decryptStringValue(encryptedPreferences.getString(KEY, defaultKey)) != null){
-            if (encryptedPreferences.getUtils().decryptStringValue(
-                    encryptedPreferences.getString(KEY, defaultKey)).equalsIgnoreCase("NOTHING")
-                    && encryptedPreferences.getString(STATUS, "0").equalsIgnoreCase("0")){
-                return false;
+        if (encryptedPreferences.getString(KEY, defaultKey) != null){
+            if (!encryptedPreferences.getUtils().decryptStringValue(encryptedPreferences.getString(KEY, defaultKey)).equalsIgnoreCase("NOTHING")){
+                return true;
             }
-            return true;
+            return false;
         }
         return false;
     }
@@ -102,21 +105,6 @@ public class Session implements EncryptedPreferences.OnSharedPreferenceChangeLis
 
     public void setConnectionState(String state){
         encryptedPreferences.edit().putString(CONNECTION, state).apply();
-    }
-    public void setTrackKurir(int id_order, String id_kurir, String nama_kurir){
-        encryptedPreferences.edit().putInt("id_order", id_order).putString("id_kurir", id_kurir).putString("nama_kurir", nama_kurir).apply();
-    }
-    public String getTrackKurir(){
-        return encryptedPreferences.getString("id_kurir", "nothing");
-    }
-    public String getNamaKurir(){
-        return encryptedPreferences.getString("nama_kurir", "nothing");
-    }
-    public void setLocKurir(String latitude, String longitude){
-        encryptedPreferences.edit().putString("lat"+getTrackKurir(), latitude).putString("long"+getTrackKurir(), longitude).apply();
-    }
-    public String getLocKurir(String mode, String id_kurir){
-        return encryptedPreferences.getString(mode+id_kurir, "nothing");
     }
     public String getConnectionState(){
         return encryptedPreferences.getString(CONNECTION, "0");

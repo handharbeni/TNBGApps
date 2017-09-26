@@ -3,6 +3,7 @@ package illiyin.mhandharbeni.realmlibrary;
 import android.content.Context;
 
 import illiyin.mhandharbeni.crudrealmmodul.CRUDRealm;
+import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 
@@ -63,6 +64,14 @@ public class Crud {
     }
     public void delete(String key, Integer value){
         crudRealm.delete(key, value);
+    }
+    public void deleteAll(final Class<? extends RealmObject> objectModels){
+        crudRealm.realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.delete(objectModels);
+            }
+        });
     }
     public Boolean checkDuplicate(String key, String value){
         RealmResults realmResults = crudRealm.read(key, value);

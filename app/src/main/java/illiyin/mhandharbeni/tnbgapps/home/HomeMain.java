@@ -1,8 +1,6 @@
 package illiyin.mhandharbeni.tnbgapps.home;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
@@ -10,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper;
 
@@ -24,8 +21,6 @@ import illiyin.mhandharbeni.tnbgapps.home.adapter.TabsPagerAdapter;
 public class HomeMain extends Fragment implements TabLayout.OnTabSelectedListener {
     private ViewPager viewPager;
     private TabLayout tabLayout;
-    private FloatingActionButton fab;
-    private TabsPagerAdapter mAdapter;
     private TabLayoutHelper mTabLayoutHelper;
 
     private View v;

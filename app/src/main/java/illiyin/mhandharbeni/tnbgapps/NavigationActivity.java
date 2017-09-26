@@ -1,10 +1,14 @@
 package illiyin.mhandharbeni.tnbgapps;
 
+import android.Manifest;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -37,11 +41,40 @@ public class NavigationActivity extends AppCompatActivity
     private NavigationView navigationView;
     private SearchView searchView;
     private Menu menuSearchView;
-    private TextView headersub;
+    private TextView headertitle, headersub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String[] permissions = new String[11];
+        permissions[0] = Manifest.permission.CAMERA;
+        permissions[1] = Manifest.permission.INTERNET;
+        permissions[2] = Manifest.permission.WAKE_LOCK;
+        permissions[3] = Manifest.permission.LOCATION_HARDWARE;
+        permissions[4] = Manifest.permission.ACCESS_COARSE_LOCATION;
+        permissions[5] = Manifest.permission.ACCESS_FINE_LOCATION;
+        permissions[6] = Manifest.permission.READ_PHONE_STATE;
+        permissions[7] = Manifest.permission.ACCESS_NETWORK_STATE;
+        permissions[8] = Manifest.permission.ACCESS_WIFI_STATE;
+        permissions[9] = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        permissions[10] = Manifest.permission.READ_EXTERNAL_STORAGE;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    permissions,
+                    5
+            );
+        }
+
+
+
+        StrictMode.ThreadPolicy old = StrictMode.getThreadPolicy();
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder(old)
+                .permitDiskWrites()
+                .build());
+        StrictMode.setThreadPolicy(old);
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         init_serviceadapter();
         setContentView(R.layout.activity_navigation);
@@ -61,11 +94,18 @@ public class NavigationActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
         headersub = header.findViewById(R.id.headersub);
+        headertitle = header.findViewById(R.id.headertitle);
         session = new Session(getApplicationContext(), this);
         session.setCustomParams("LastFragment", "home");
+        setNavigation();
+    }
+    private void setNavigation(){
         Boolean login = session.getCustomParams("LOGINSTATE", false);
+        Log.d(TAG, "setNavigation: "+login);
         if (login){
             headersub.setVisibility(View.VISIBLE);
+            headertitle.setText(session.getCustomParams("username", "NOTHING"));
+            headersub.setText(session.getCustomParams("email", "-"));
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.nav_signin);
         }else{
@@ -122,42 +162,40 @@ public class NavigationActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_home){
-            collapseSearchView();
             Fragment fragment = new HomeMain();
             changeFragment(fragment, true, "home");
         }else if (id == R.id.nav_kontak){
-            collapseSearchView();
             Fragment fragment = new MainKontak();
             changeFragment(fragment, true, "kontak");
+            setNavigation();
         }else if(id == R.id.nav_notifikasi){
 
         }else if(id == R.id.nav_changepassword){
-            collapseSearchView();
             Fragment fragment = new ChangePassword();
             changeFragment(fragment, true, "changePassword");
+            setNavigation();
         }else if(id == R.id.nav_notifikasi){
 
         }else if(id == R.id.nav_signout){
             session.setCustomParams("LOGINSTATE", false);
-            collapseSearchView();
+            session.deleteSession();
             Fragment fragment = new Login();
-            changeFragment(fragment, false, "login");
+            changeFragment(fragment, true, "login");
+            setNavigation();
         }else if(id == R.id.nav_signin){
-            collapseSearchView();
             Fragment fragment = new Login();
-            changeFragment(fragment, false, "login");
+            changeFragment(fragment, true, "login");
+            setNavigation();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-    private void collapseSearchView(){
     }
     private void removeSearch(){
         String lastFragment = session.getCustomParams("LastFragment", "nothing");
@@ -167,6 +205,13 @@ public class NavigationActivity extends AppCompatActivity
                 break;
             case "kontak" :
                 changeFragment(new MainKontak(), true, "kontak");
+                break;
+            case "login" :
+                changeFragment(new Login(), true, "login");
+                break;
+            case "changePassword" :
+                changeFragment(new ChangePassword(), true, "changePassword");
+                break;
             default:
                 break;
         }
@@ -225,6 +270,4 @@ public class NavigationActivity extends AppCompatActivity
         }
     }
 
-    private void setDrawer(){
-    }
 }
