@@ -27,6 +27,7 @@
                 android:src="@drawable/back"/>
 
             <TextView
+                android:id="@+id/titleappbar"
                 android:paddingLeft="30dp"
                 android:textColor="@color/greyCustom"
                 android:textSize="25sp"

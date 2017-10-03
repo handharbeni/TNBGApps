@@ -6,6 +6,7 @@ import illiyin.mhandharbeni.crudrealmmodul.CRUDRealm;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by root on 17/07/17.
@@ -39,6 +40,23 @@ public class Crud {
     public RealmResults read(String key, Integer[] value){
         return crudRealm.read(key, value);
     }
+
+    public RealmResults readSorted(String keySorted, Sort sort){
+        return crudRealm.read().sort(keySorted, sort);
+    }
+    public RealmResults readSorted(String key, String value, String keySorted, Sort sort){
+        return crudRealm.read(key, value).sort(keySorted, sort);
+    }
+    public RealmResults readSorted(String key, String[] value, String keySorted, Sort sort){
+        return crudRealm.read(key, value).sort(keySorted, sort);
+    }
+    public RealmResults readSorted(String key, Integer value, String keySorted, Sort sort){
+        return crudRealm.read(key, value).sort(keySorted, sort);
+    }
+    public RealmResults readSorted(String key, Integer[] value, String keySorted, Sort sort){
+        return crudRealm.read(key, value).sort(keySorted, sort);
+    }
+
     public RealmObject getRealmObject(String key, String value){
         RealmObject objectUpdate = crudRealm.setObjectUpdate(key, value);
         return objectUpdate;

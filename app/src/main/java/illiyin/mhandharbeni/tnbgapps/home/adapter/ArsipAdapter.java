@@ -1,6 +1,7 @@
 package illiyin.mhandharbeni.tnbgapps.home.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
@@ -11,12 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
 import illiyin.mhandharbeni.databasemodule.NewsModel;
 import illiyin.mhandharbeni.tnbgapps.R;
+import illiyin.mhandharbeni.tnbgapps.home.fragment.subfragment.DetailBerita;
 
 /**
  * Created by root on 9/13/17.
@@ -47,10 +50,20 @@ public class ArsipAdapter  extends RecyclerView.Adapter<ArsipAdapter.MyViewHolde
         final NewsModel m = this.newsList.get(position);
         h.tanggal.setText(m.getCreated_at());
         h.title.setText(m.getTitle());
+        h.title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(mContext, DetailBerita.class);
+                i.putExtra("idBerita", String.valueOf(m.getId()));
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(i);
+            }
+        });
         Glide.with(mContext)
-                .load(m.getMedias())
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .load(m.getMedias()+"?size=512x512")
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(false)
+                .priority(Priority.HIGH)
                 .into(h.thumbnail);
     }
     @Override

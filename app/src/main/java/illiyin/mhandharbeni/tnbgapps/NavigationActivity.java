@@ -3,6 +3,7 @@ package illiyin.mhandharbeni.tnbgapps;
 import android.Manifest;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,17 +22,30 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 import illiyin.mhandharbeni.servicemodule.ServiceAdapter;
 import illiyin.mhandharbeni.sessionlibrary.Session;
 import illiyin.mhandharbeni.sessionlibrary.SessionListener;
+import illiyin.mhandharbeni.tnbgapps.akun.AccountActivation;
 import illiyin.mhandharbeni.tnbgapps.akun.ChangePassword;
 import illiyin.mhandharbeni.tnbgapps.akun.Login;
 import illiyin.mhandharbeni.tnbgapps.home.HomeMain;
 import illiyin.mhandharbeni.tnbgapps.kontak.MainKontak;
+import illiyin.mhandharbeni.tnbgapps.notifikasi.MainNotifikasi;
 import illiyin.mhandharbeni.tnbgapps.search.SearchMain;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener, SessionListener {
@@ -65,6 +79,9 @@ public class NavigationActivity extends AppCompatActivity
                     permissions,
                     5
             );
+//            Window w = getWindow();
+//            w.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+//            w.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
 
 
@@ -100,14 +117,18 @@ public class NavigationActivity extends AppCompatActivity
         setNavigation();
     }
     private void setNavigation(){
-        Boolean login = session.getCustomParams("LOGINSTATE", false);
-        Log.d(TAG, "setNavigation: "+login);
-        if (login){
+        String login = session.getCustomParams("username", "nothing");
+        if (!login.equalsIgnoreCase("nothing")){
             headersub.setVisibility(View.VISIBLE);
             headertitle.setText(session.getCustomParams("username", "NOTHING"));
             headersub.setText(session.getCustomParams("email", "-"));
-            navigationView.getMenu().clear();
-            navigationView.inflateMenu(R.menu.nav_signin);
+            if (hideNavActivation()){
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.nav_signin_activation);
+            }else{
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.nav_signin);
+            }
         }else{
             headersub.setVisibility(View.GONE);
             navigationView.getMenu().clear();
@@ -150,6 +171,7 @@ public class NavigationActivity extends AppCompatActivity
                 searchLayout();
             }
         });
+
         return true;
     }
 
@@ -171,25 +193,29 @@ public class NavigationActivity extends AppCompatActivity
         }else if (id == R.id.nav_kontak){
             Fragment fragment = new MainKontak();
             changeFragment(fragment, true, "kontak");
-            setNavigation();
-        }else if(id == R.id.nav_notifikasi){
-
         }else if(id == R.id.nav_changepassword){
             Fragment fragment = new ChangePassword();
             changeFragment(fragment, true, "changePassword");
-            setNavigation();
         }else if(id == R.id.nav_notifikasi){
-
+            Fragment fragment = new MainNotifikasi();
+            changeFragment(fragment, true, "Notifikasi");
         }else if(id == R.id.nav_signout){
-            session.setCustomParams("LOGINSTATE", false);
+            session.setCustomParams("LOGINSTATES", "false");
             session.deleteSession();
+            Bundle bundleLogin = new Bundle();
+            bundleLogin.putString("from", "nav");
             Fragment fragment = new Login();
+            fragment.setArguments(bundleLogin);
             changeFragment(fragment, true, "login");
-            setNavigation();
         }else if(id == R.id.nav_signin){
+            Bundle bundleLogin = new Bundle();
+            bundleLogin.putString("from", "nav");
             Fragment fragment = new Login();
+            fragment.setArguments(bundleLogin);
             changeFragment(fragment, true, "login");
-            setNavigation();
+        }else if(id == R.id.nav_activation){
+            Intent i = new Intent(getApplicationContext(), AccountActivation.class);
+            startActivity(i);
         }
 
 
@@ -207,10 +233,17 @@ public class NavigationActivity extends AppCompatActivity
                 changeFragment(new MainKontak(), true, "kontak");
                 break;
             case "login" :
-                changeFragment(new Login(), true, "login");
+                Bundle bundleLogin = new Bundle();
+                bundleLogin.putString("from", "nav");
+                Fragment fragment = new Login();
+                fragment.setArguments(bundleLogin);
+                changeFragment(fragment, true, "login");
                 break;
             case "changePassword" :
                 changeFragment(new ChangePassword(), true, "changePassword");
+                break;
+            case "Notifikasi" :
+                changeFragment(new MainNotifikasi(), true, "Notifikasi");
                 break;
             default:
                 break;
@@ -258,16 +291,28 @@ public class NavigationActivity extends AppCompatActivity
 
     @Override
     public void sessionChange() {
-        Boolean login = session.getCustomParams("LOGINSTATE", true);
-        if (login){
+        String login = session.getCustomParams("username", "nothing");
+        if (!login.equalsIgnoreCase("nothing")){
             headersub.setVisibility(View.VISIBLE);
-            navigationView.getMenu().clear();
-            navigationView.inflateMenu(R.menu.nav_signin);
+            if (hideNavActivation()){
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.nav_signin_activation);
+            }else{
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.nav_signin);
+            }
         }else{
             headersub.setVisibility(View.GONE);
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.nav_signout);
         }
     }
-
+    private Boolean hideNavActivation(){
+        Integer status = session.getCustomParams("status", 0);
+        if (status == 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

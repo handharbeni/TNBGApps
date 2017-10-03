@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:text="@string/placeholder_trending"/>
     <TextView
+        android:textColor="@color/textBlack"
         android:id="@+id/penggunatrending"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

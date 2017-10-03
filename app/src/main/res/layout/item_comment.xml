@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content" android:background="@color/textWhite" android:padding="@dimen/paddingtitle">
+    <TextView
+        android:padding="@dimen/paddingtitle"
+        android:text="This is Name"
+        android:textColor="@color/textBlack"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:id="@+id/nama"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:padding="@dimen/paddingtitle"
+        android:text="This is Comment"
+        android:textColor="@color/greyCustom"
+        android:textSize="12sp"
+        android:id="@+id/komen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

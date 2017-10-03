@@ -1,9 +1,12 @@
 package illiyin.mhandharbeni.tnbgapps.akun;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +21,11 @@ import org.json.JSONObject;
 import illiyin.mhandharbeni.networklibrary.CallHttp;
 import illiyin.mhandharbeni.sessionlibrary.Session;
 import illiyin.mhandharbeni.sessionlibrary.SessionListener;
+import illiyin.mhandharbeni.tnbgapps.NavigationActivity;
 import illiyin.mhandharbeni.tnbgapps.R;
 import illiyin.mhandharbeni.tnbgapps.home.HomeMain;
 import illiyin.mhandharbeni.tnbgapps.home.fragment.HomeFragment;
+import illiyin.mhandharbeni.utilslibrary.SnackBar;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -39,9 +44,17 @@ public class Login extends Fragment implements SessionListener {
     TextView dosignout;
     Button signin;
     CallHttp callHttp;
-
+    private AlertDialog.Builder alertDialog;
+    private ProgressDialog dialog;
+    private String from;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            from = bundle.getString("from");
+        }else{
+            from = "class";
+        }
         callHttp = new CallHttp(getActivity().getApplicationContext());
         session = new Session(getActivity().getApplicationContext(), this);
         v = inflater.inflate(R.layout.login_layout, container, false);
@@ -73,6 +86,7 @@ public class Login extends Fragment implements SessionListener {
     }
 
     public void do_login(){
+        showDialog();
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -80,12 +94,37 @@ public class Login extends Fragment implements SessionListener {
             }
         });
     }
+    private void showDialog(){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                signin.setEnabled(false);
+                signin.setText("Loginin..");
+                dialog = new ProgressDialog(getActivity());
+                dialog.setCancelable(false);
+                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                dialog.show();
+            }
+        });
+    }
+    private void dismissDialog(){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                signin.setEnabled(true);
+                signin.setText(getString(R.string.placeholder_signin));
+                dialog.dismiss();
+            }
+        });
+    }
     private void sentToServer(String url){
-        JSONObject json;
         try {
+            JSONObject json;
             json = new JSONObject();
             json.put("username", username.getText().toString());
             json.put("password", password.getText().toString());
+
+            Log.d(TAG, "sentToServer: "+json.toString());
 
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             RequestBody body = RequestBody.create(JSON, json.toString());
@@ -97,29 +136,45 @@ public class Login extends Fragment implements SessionListener {
                 JSONObject dataJson = jsonResponse.getJSONObject("data");
                 String sUsername = username.getText().toString();
                 String sPassword = session.encryptedString(password.getText().toString());
-                String sEmail = dataJson.getString("email");
-                String sAvatar = dataJson.getString("avatar");
+                String sEmail = dataJson.getString("email")!="null"?dataJson.getString("email"):"";
+                String sAvatar = dataJson.getString("avatar")!="null"?dataJson.getString("avatar"):"";
                 String sPhone = dataJson.getString("phone");
+                Integer iStatus = dataJson.getInt("status");
+
                 session.setCustomParams("username", sUsername);
                 session.setCustomParams("email", sEmail);
                 session.setCustomParams("password", sPassword);
                 session.setCustomParams("avatar", sAvatar);
                 session.setCustomParams("phone", sPhone);
                 session.setCustomParams("token", sToken);
-                session.setCustomParams("LOGINSTATE", true);
+                session.setCustomParams("status", iStatus);
+                dismissDialog();
+                if (from.equalsIgnoreCase("nav")){
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.mainframe, new HomeMain());
+                    ft.commit();
+                }else{
+                    getActivity().finish();
+                }
+
             }else{
-                session.setCustomParams("LOGINSTATE", false);
+                dismissDialog();
+                showSnackBar(v, "Login Gagal");
             }
         } catch (Exception ex) {
-            session.setCustomParams("LOGINSTATE", false);
+            dismissDialog();
+            showSnackBar(v, "Login Gagal");
+            Log.d(TAG, "sentToServer: "+ex.toString());
         }
+    }
+    public void showSnackBar(View v, String message){
+        new SnackBar(getActivity().getApplicationContext())
+                .view(v)
+                .message(message)
+                .build()
+                .show();
     }
     @Override
     public void sessionChange() {
-        if (session.getCustomParams("LOGINSTATE", false)){
-            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.mainframe, new HomeMain());
-            ft.commit();
-        }
     }
 }

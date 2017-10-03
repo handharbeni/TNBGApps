@@ -34,5 +34,9 @@
     <string name="comment">Comment</string>
     <string name="like">Like</string>
     <string name="subscribe">Subscribe</string>
+    <string name="placeholder_kirim">Kirim</string>
+    <string name="placeholder_komentar">Tulis Komentar</string>
+    <string name="placeholder_activation">Activation Code</string>
+    <string name="placeholder_doactivated">Submit</string>
 
 </resources>

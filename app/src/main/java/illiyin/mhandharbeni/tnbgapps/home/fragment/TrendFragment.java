@@ -28,6 +28,7 @@ import illiyin.mhandharbeni.tnbgapps.home.adapter.HomeAdapter;
 import illiyin.mhandharbeni.tnbgapps.home.adapter.TrendingAdapter;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static android.content.ContentValues.TAG;
 
@@ -72,7 +73,8 @@ public class TrendFragment extends Fragment implements RealmRecyclerView.OnRefre
     }
     private void init_adapter(){
         Realm realm = Realm.getInstance(Realm.getDefaultConfiguration());
-        RealmResults<TrendingModel> rr = realm.where(TrendingModel.class).findAll();
+//        RealmResults<TrendingModel> rr = realm.where(TrendingModel.class).findAll();
+        RealmResults rr = crud.readSorted("id", Sort.DESCENDING);
         trendingAdapter = new TrendingAdapter(getActivity().getApplicationContext(), rr, true);
         rvtrending.setAdapter(trendingAdapter);
     }

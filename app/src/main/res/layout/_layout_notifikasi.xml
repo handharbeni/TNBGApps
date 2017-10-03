@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:rrvEmptyLayoutId="@layout/notifikasi_empty"
+    app:rrvIsRefreshable="true"
+    app:rrvLayoutType="LinearLayout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/textWhite"
+    android:layout_height="match_parent">
+
+</co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView>

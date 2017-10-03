@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/detailberita_appbar"
+        android:id="@+id/include" />
+
+    <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
+        app:rrvEmptyLayoutId="@layout/komentar_empty"
+        app:rrvIsRefreshable="true"
+        app:rrvLayoutType="LinearLayout"
+        android:background="@color/textWhite"
+        android:id="@+id/listkomentar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/include"
+        android:layout_above="@+id/inputkomentar"/>
+
+    <include layout="@layout/komentar_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/inputkomentar" />
+</RelativeLayout>

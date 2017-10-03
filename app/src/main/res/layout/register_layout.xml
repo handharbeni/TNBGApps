@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <EditText
+        android:inputType="textPassword"
         android:layout_marginTop="@dimen/paddingitem"
         android:singleLine="true"
         android:id="@+id/password"
@@ -24,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <EditText
+        android:inputType="textPassword"
         android:layout_marginTop="@dimen/paddingitem"
         android:singleLine="true"
         android:id="@+id/repeatpassword"

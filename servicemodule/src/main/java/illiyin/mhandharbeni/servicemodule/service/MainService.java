@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import illiyin.mhandharbeni.servicemodule.service.intentservice.NewsService;
+import illiyin.mhandharbeni.servicemodule.service.intentservice.NotifikasiService;
 
 /**
  * Created by root on 17/07/17.
@@ -18,7 +19,7 @@ import illiyin.mhandharbeni.servicemodule.service.intentservice.NewsService;
 
 public class MainService extends Service {
     public static Boolean serviceRunning = false;
-    public static final long NOTIFY_INTERVAL = 5 * 1000;
+    public static final long NOTIFY_INTERVAL = 15 * 1000;
     private Handler handler = new Handler();
     private Timer timer = null;
 
@@ -64,6 +65,10 @@ public class MainService extends Service {
                 public void run() {
                     if (!checkIsRunning(NewsService.class)){
                         Intent is = new Intent(getBaseContext(), NewsService.class);
+                        startService(is);
+                    }
+                    if (!checkIsRunning(NotifikasiService.class)){
+                        Intent is = new Intent(getBaseContext(), NotifikasiService.class);
                         startService(is);
                     }
                 }

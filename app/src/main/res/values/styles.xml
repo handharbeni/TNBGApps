@@ -1,11 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="ThemeOverlay.AppCompat.Dark">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="android:itemBackground">@color/greyCustom</item>
         <item name="searchViewStyle">@style/AppTheme.SearchViewStyle</item>
+        <item name="android:textColorHint">@color/blueCustom</item>
+        <item name="android:textColorHighlight">@color/blueCustom</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -16,6 +18,14 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="android:itemBackground">@color/greyCustom</item>
         <item name="searchViewStyle">@style/AppTheme.SearchViewStyle</item>
+        <item name="android:textColorHint">@color/blueCustom</item>
+        <item name="android:textColorHighlight">@color/blueCustom</item>
+        <item name="colorControlNormal">@color/greyCustom</item>
+<!--
+        <item name="android:colorControlActivated">@color/blueCustom</item>
+        <item name="android:colorControlHighlight">@color/blueCustom</item>
+-->
+        <!-- colorControlActivated & colorControlHighlight use the colorAccent color by default -->
     </style>
     <style name="AppTheme.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>

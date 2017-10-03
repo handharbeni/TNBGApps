@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.io.IOException;
+
 import illiyin.mhandharbeni.databasemodule.AdapterModel;
 import illiyin.mhandharbeni.servicemodule.service.MainService;
 
@@ -46,6 +48,10 @@ public class LoadMoreService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent: Prosess "+url);
-        adapterModel.syncNewsPaging(url);
+        try {
+            adapterModel.syncNewsPaging(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

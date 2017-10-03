@@ -30,6 +30,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".home.fragment.subfragment.DetailBerita" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".home.fragment.subfragment.ListComment" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".akun.MainAccount" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".akun.AccountActivation" android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
