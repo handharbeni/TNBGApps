@@ -3,6 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <ImageView
+        android:minWidth="600dp"
+        android:minHeight="200dp"
         android:maxWidth="600dp"
         android:maxHeight="338dp"
         android:scaleType="fitCenter"

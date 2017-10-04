@@ -1,4 +1,4 @@
-package illiyin.mhandharbeni.tnbgapps.home.adapter;
+package illiyin.mhandharbeni.tnbgapps.search.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +19,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.ParseException;
 
-import illiyin.mhandharbeni.databasemodule.NewsModel;
+import illiyin.mhandharbeni.databasemodule.TempNewsModel;
 import illiyin.mhandharbeni.sessionlibrary.Session;
 import illiyin.mhandharbeni.sessionlibrary.SessionListener;
 import illiyin.mhandharbeni.tnbgapps.R;
@@ -33,20 +33,20 @@ import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
 
 /**
- * Created by root on 9/12/17.
+ * Created by root on 10/4/17.
  */
 
-public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAdapter.MyViewHolder> implements SessionListener {
+public class SearchAdapter extends RealmBasedRecyclerViewAdapter<TempNewsModel, SearchAdapter.MyViewHolder> implements SessionListener {
     private Session session;
     @Override
-    public HomeAdapter.MyViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
+    public SearchAdapter.MyViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
         View v = inflater.inflate(R.layout.itempost, viewGroup, false);
-        return new HomeAdapter.MyViewHolder((CardView) v);
+        return new SearchAdapter.MyViewHolder((CardView) v);
     }
 
     @Override
-    public void onBindRealmViewHolder(final HomeAdapter.MyViewHolder myViewHolder, final int i) {
-        final NewsModel m = realmResults.get(i);
+    public void onBindRealmViewHolder(final SearchAdapter.MyViewHolder myViewHolder, final int i) {
+        final TempNewsModel m = realmResults.get(i);
         DateFormat dateFormat = new DateFormat();
 
         try {
@@ -127,12 +127,12 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
                             String action = jsonResponse.getString("action");
                             if (action.equalsIgnoreCase("like")){
                                 int likeCount = m.getLike_count()+1;
-                                myViewHolder.text_like.setText(likeCount+"  "+getContext().getString(R.string.like));
-                                Glide.with(getContext()).load("").placeholder(R.drawable.like_filled).into(myViewHolder.like);
+                                myViewHolder.text_subscribe.setText(likeCount+"  "+getContext().getString(R.string.like));
+                                Glide.with(getContext()).load(R.drawable.like_filled).into(myViewHolder.like);
                             }else{
                                 int likeCount = m.getLike_count()-1;
-                                myViewHolder.text_like.setText(likeCount+"  "+getContext().getString(R.string.like));
-                                Glide.with(getContext()).load("").placeholder(R.drawable.like).into(myViewHolder.like);
+                                myViewHolder.text_subscribe.setText(likeCount+"  "+getContext().getString(R.string.like));
+                                Glide.with(getContext()).load(R.drawable.like).into(myViewHolder.like);
                             }
                         }
                     }else{
@@ -174,7 +174,7 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
 
     @Override
     public void sessionChange() {
-
+        notifyDataSetChanged();
     }
 
     public class MyViewHolder extends RealmViewHolder {
@@ -203,7 +203,7 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
             this.iconsubscribe = container.findViewById(R.id.iconsubscribe);
         }
     }
-    public HomeAdapter(Context context, RealmResults<NewsModel> realmResults, boolean automaticUpdate) {
+    public SearchAdapter(Context context, RealmResults<TempNewsModel> realmResults, boolean automaticUpdate) {
         super(context, realmResults, automaticUpdate, false);
         session = new Session(getContext(), this);
 

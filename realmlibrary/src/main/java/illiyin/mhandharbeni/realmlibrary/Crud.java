@@ -3,6 +3,7 @@ package illiyin.mhandharbeni.realmlibrary;
 import android.content.Context;
 
 import illiyin.mhandharbeni.crudrealmmodul.CRUDRealm;
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
@@ -40,7 +41,12 @@ public class Crud {
     public RealmResults read(String key, Integer[] value){
         return crudRealm.read(key, value);
     }
-
+    public RealmResults like(String key, String filter, Case casing){
+        return crudRealm.like(key, filter, casing);
+    }
+    public RealmResults contains(String key, String filter){
+        return crudRealm.contains(key, filter);
+    }
     public RealmResults readSorted(String keySorted, Sort sort){
         return crudRealm.read().sort(keySorted, sort);
     }

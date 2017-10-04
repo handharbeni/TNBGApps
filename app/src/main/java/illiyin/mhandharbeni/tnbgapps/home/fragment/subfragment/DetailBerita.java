@@ -10,7 +10,6 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -23,7 +22,10 @@ import java.text.ParseException;
 
 import illiyin.mhandharbeni.databasemodule.NewsModel;
 import illiyin.mhandharbeni.realmlibrary.Crud;
+import illiyin.mhandharbeni.sessionlibrary.Session;
+import illiyin.mhandharbeni.sessionlibrary.SessionListener;
 import illiyin.mhandharbeni.tnbgapps.R;
+import illiyin.mhandharbeni.tnbgapps.akun.MainAccount;
 import illiyin.mhandharbeni.utilslibrary.AttributeUtils;
 import illiyin.mhandharbeni.utilslibrary.DateFormat;
 import io.realm.RealmResults;
@@ -32,7 +34,7 @@ import io.realm.RealmResults;
  * Created by root on 9/14/17.
  */
 
-public class DetailBerita extends AppCompatActivity {
+public class DetailBerita extends AppCompatActivity implements SessionListener {
     private static final String TAG = "DetailBerita";
     private NewsModel newsModel;
     private Crud crud;
@@ -44,10 +46,13 @@ public class DetailBerita extends AppCompatActivity {
     private String idBerita;
     private String content;
     private DateFormat dateFormat;
+    private Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        session = new Session(getApplicationContext(), this);
         newsModel = new NewsModel();
         crud = new Crud(getApplicationContext(), newsModel);
         dateFormat = new DateFormat();
@@ -97,19 +102,26 @@ public class DetailBerita extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("post_id", Integer.valueOf(idBerita));
-                    AttributeUtils attributeUtils = new AttributeUtils(getApplicationContext());
-                    String response  = attributeUtils.like("https://api.tnbg.news/api/reaction", jsonObject.toString());
-                    JSONObject jsonResponse = new JSONObject(response);
-                    Boolean success = jsonResponse.getBoolean("success");
-                    if (success){
-                        String action = jsonResponse.getString("action");
-                        if (action.equalsIgnoreCase("like")){
-                            Glide.with(getApplicationContext()).load(R.drawable.like_filled).into(like);
-                        }else{
-                            Glide.with(getApplicationContext()).load(R.drawable.like).into(like);
+                    String login = session.getCustomParams("username", "nothing");
+                    if (!login.equalsIgnoreCase("nothing")){
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("post_id", Integer.valueOf(idBerita));
+                        AttributeUtils attributeUtils = new AttributeUtils(getApplicationContext());
+                        String response  = attributeUtils.like("https://api.tnbg.news/api/reaction", jsonObject.toString());
+                        JSONObject jsonResponse = new JSONObject(response);
+                        Boolean success = jsonResponse.getBoolean("success");
+                        if (success){
+                            String action = jsonResponse.getString("action");
+                            if (action.equalsIgnoreCase("like")){
+                                Glide.with(getApplicationContext()).load("").placeholder(R.drawable.like_filled).into(like);
+                            }else{
+                                Glide.with(getApplicationContext()).load("").placeholder(R.drawable.like).into(like);
+                            }
                         }
+                    }else{
+                        Intent i = new Intent(getApplicationContext(), MainAccount.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(i);
                     }
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
@@ -120,14 +132,20 @@ public class DetailBerita extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("post_id", Integer.valueOf(idBerita));
-                    AttributeUtils attributeUtils = new AttributeUtils(getApplicationContext());
-                    String response  = attributeUtils.subscribe("https://api.tnbg.news/api/post/subscribe", jsonObject.toString());
-                    JSONObject jsonResponse = new JSONObject(response);
-                    Boolean success = jsonResponse.getBoolean("success");
-                    if (success){
-                        text_subscribe.setText("Subscribed");
+                    String login = session.getCustomParams("username", "nothing");
+                    if (!login.equalsIgnoreCase("nothing")){
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("post_id", Integer.valueOf(idBerita));
+                        AttributeUtils attributeUtils = new AttributeUtils(getApplicationContext());
+                        String response  = attributeUtils.subscribe("https://api.tnbg.news/api/post/subscribe", jsonObject.toString());
+                        JSONObject jsonResponse = new JSONObject(response);
+                        Boolean success = jsonResponse.getBoolean("success");
+                        if (success){
+                            text_subscribe.setText("Subscribed");
+                        }
+                    }else{
+                        Intent i = new Intent(getApplicationContext(), MainAccount.class);
+                        startActivity(i);
                     }
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
@@ -167,7 +185,8 @@ public class DetailBerita extends AppCompatActivity {
                         .skipMemoryCache(false)
                         .into(media);
                 Glide.with(this)
-                        .load(newsResult.getLiked()?R.drawable.like_filled:R.drawable.like)
+                        .load("")
+                        .placeholder(newsResult.getLiked()?R.drawable.like_filled:R.drawable.like)
                         .fitCenter()
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .skipMemoryCache(false)
@@ -178,5 +197,10 @@ public class DetailBerita extends AppCompatActivity {
                 contenthtml.loadData(content, "text/html","UTF-8");
             }
         }
+    }
+
+    @Override
+    public void sessionChange() {
+
     }
 }

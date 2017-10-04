@@ -1,6 +1,7 @@
 package illiyin.mhandharbeni.tnbgapps.home.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,8 @@ import java.util.List;
 
 import illiyin.mhandharbeni.databasemodule.TrendingModel;
 import illiyin.mhandharbeni.tnbgapps.R;
+import illiyin.mhandharbeni.tnbgapps.search.SearchClass;
+import illiyin.mhandharbeni.tnbgapps.search.SearchMain;
 import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
@@ -33,10 +36,12 @@ public class TrendingAdapter extends RealmBasedRecyclerViewAdapter<TrendingModel
     public class ViewHolder extends RealmViewHolder {
 
         public TextView trending, penggunatrending;
+        public LinearLayout layouttrending;
         public ViewHolder(LinearLayout container) {
             super(container);
             this.trending = container.findViewById(R.id.trending);
-            penggunatrending = container.findViewById(R.id.penggunatrending);
+            this.penggunatrending = container.findViewById(R.id.penggunatrending);
+            this.layouttrending = container.findViewById(R.id.layouttrending);
         }
     }
 
@@ -48,8 +53,17 @@ public class TrendingAdapter extends RealmBasedRecyclerViewAdapter<TrendingModel
 
     @Override
     public void onBindRealmViewHolder(TrendingAdapter.ViewHolder myViewHolder, int i) {
-        TrendingModel trendingModel = realmResults.get(i);
+        final TrendingModel trendingModel = realmResults.get(i);
         myViewHolder.trending.setText("#"+trendingModel.getName());
         myViewHolder.penggunatrending.setText(trendingModel.getCount()+" Pengguna");
+        myViewHolder.layouttrending.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), SearchClass.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("trending", trendingModel.getName());
+                getContext().startActivity(intent);
+            }
+        });
     }
 }

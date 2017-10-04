@@ -263,7 +263,10 @@ public class NavigationActivity extends AppCompatActivity
         }
     }
     private void searchLayout(){
+        Bundle bundleSearch = new Bundle();
+        bundleSearch.putString("from", "nav");
         Fragment fragment = new SearchMain();
+        fragment.setArguments(bundleSearch);
         changeFragment(fragment, false, "");
     }
     @Override

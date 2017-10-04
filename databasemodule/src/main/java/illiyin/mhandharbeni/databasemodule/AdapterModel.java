@@ -77,7 +77,7 @@ public class AdapterModel implements SessionListener{
         Crud crudNews = new Crud(context, newsModel);
         String response = "";
         String login = session.getCustomParams("username", "nothing");
-        if (!login.equalsIgnoreCase("nothing")){
+        if (login.equalsIgnoreCase("nothing")){
             response = callHttp.get(url);
         }else{
             response = getNews(url);

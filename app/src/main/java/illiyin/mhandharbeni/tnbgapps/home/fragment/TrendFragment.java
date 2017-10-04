@@ -72,7 +72,7 @@ public class TrendFragment extends Fragment implements RealmRecyclerView.OnRefre
         }
     }
     private void init_adapter(){
-        Realm realm = Realm.getInstance(Realm.getDefaultConfiguration());
+//        Realm realm = Realm.getInstance(Realm.getDefaultConfiguration());
 //        RealmResults<TrendingModel> rr = realm.where(TrendingModel.class).findAll();
         RealmResults rr = crud.readSorted("id", Sort.DESCENDING);
         trendingAdapter = new TrendingAdapter(getActivity().getApplicationContext(), rr, true);
