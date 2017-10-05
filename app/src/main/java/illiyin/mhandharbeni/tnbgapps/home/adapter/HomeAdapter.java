@@ -54,32 +54,36 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        myViewHolder.status.setText(String.valueOf(m.getStatus()==0?"On Going":"Complete"));
+        myViewHolder.status.setText(String.valueOf(m.getStatus()==0?getContext().getString(R.string.placeholder_onprogress):getContext().getString(R.string.placeholder_oncomplete)));
         myViewHolder.title.setText(m.getTitle());
         myViewHolder.frontcontent.setText(m.getExcerpt());
         myViewHolder.text_comment.setText(m.getComment_count()+" "+getContext().getString(R.string.comment));
         myViewHolder.text_like.setText(m.getLike_count()+"  "+getContext().getString(R.string.like));
-        myViewHolder.text_subscribe.setText(m.getSubscribe()?"Subscribed":"Subscribe");
+        myViewHolder.text_progress.setText(m.getChild()+" "+getContext().getString(R.string.placeholder_progress));
 
         if (m.getLiked()){
             Glide.with(getContext()).load("").placeholder(R.drawable.like_filled).into(myViewHolder.like);
         }else{
             Glide.with(getContext()).load("").placeholder(R.drawable.like).into(myViewHolder.like);
         }
-
-        Glide.with(getContext())
-                .load(m.getMedias()+"?size=600x338")
-                .placeholder(R.drawable.loading)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .skipMemoryCache(false)
-                .priority(Priority.HIGH)
-                .fitCenter()
-                .into(myViewHolder.imagetitle);
+        if (m.getMedias().equalsIgnoreCase("nothing")){
+            myViewHolder.imagetitle.setVisibility(View.GONE);
+        }else{
+            Glide.with(getContext())
+                    .load(m.getMedias()+"?size=600x338")
+                    .placeholder(R.drawable.loading)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .skipMemoryCache(false)
+                    .priority(Priority.HIGH)
+                    .fitCenter()
+                    .into(myViewHolder.imagetitle);
+        }
         myViewHolder.imagetitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getContext(), DetailBerita.class);
                 i.putExtra("idBerita", String.valueOf(m.getId()));
+                i.putExtra("from", "parent");
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(i);
             }
@@ -89,6 +93,7 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
             public void onClick(View view) {
                 Intent i = new Intent(getContext(), DetailBerita.class);
                 i.putExtra("idBerita", String.valueOf(m.getId()));
+                i.putExtra("from", "parent");
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(i);
             }
@@ -98,6 +103,7 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
             public void onClick(View view) {
                 Intent i = new Intent(getContext(), DetailBerita.class);
                 i.putExtra("idBerita", String.valueOf(m.getId()));
+                i.putExtra("from", "parent");
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(i);
             }
@@ -107,6 +113,7 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
             public void onClick(View view) {
                 Intent i = new Intent(getContext(), ListComment.class);
                 i.putExtra("idBerita", String.valueOf(m.getId()));
+                i.putExtra("from", "parent");
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(i);
             }
@@ -145,31 +152,41 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
                 }
             }
         });
-        myViewHolder.iconsubscribe.setOnClickListener(new View.OnClickListener() {
+        myViewHolder.iconprogress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    String login = session.getCustomParams("username", "nothing");
-                    if (!login.equalsIgnoreCase("nothing")){
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("post_id", m.getId());
-                        AttributeUtils attributeUtils = new AttributeUtils(getContext());
-                        String response  = attributeUtils.subscribe("https://api.tnbg.news/api/post/subscribe", jsonObject.toString());
-                        JSONObject jsonResponse = new JSONObject(response);
-                        Boolean success = jsonResponse.getBoolean("success");
-                        if (success){
-                            myViewHolder.text_subscribe.setText("Subscribed");
-                        }
-                    }else{
-                        Intent i = new Intent(getContext(), MainAccount.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getContext().startActivity(i);
-                    }
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                }
+                Intent i = new Intent(getContext(), DetailBerita.class);
+                i.putExtra("idBerita", String.valueOf(m.getId()));
+                i.putExtra("from", "child");
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(i);
             }
         });
+//        myViewHolder.iconsubscribe.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                try {
+//                    String login = session.getCustomParams("username", "nothing");
+//                    if (!login.equalsIgnoreCase("nothing")){
+//                        JSONObject jsonObject = new JSONObject();
+//                        jsonObject.put("post_id", m.getId());
+//                        AttributeUtils attributeUtils = new AttributeUtils(getContext());
+//                        String response  = attributeUtils.subscribe("https://api.tnbg.news/api/post/subscribe", jsonObject.toString());
+//                        JSONObject jsonResponse = new JSONObject(response);
+//                        Boolean success = jsonResponse.getBoolean("success");
+//                        if (success){
+//                            myViewHolder.text_subscribe.setText("Subscribed");
+//                        }
+//                    }else{
+//                        Intent i = new Intent(getContext(), MainAccount.class);
+//                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        getContext().startActivity(i);
+//                    }
+//                } catch (IOException | JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -180,9 +197,9 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
     public class MyViewHolder extends RealmViewHolder {
 
         CardView parentpost;
-        TextView tanggal, status, title, frontcontent, text_comment, text_like, text_subscribe;
-        ImageView imagetitle, comment, like, subscribe;
-        LinearLayout iconcomment, iconlike, iconsubscribe;
+        TextView tanggal, status, title, frontcontent, text_comment, text_like, text_progress;
+        ImageView imagetitle, comment, like, progress;
+        LinearLayout iconcomment, iconlike, iconprogress;
 
         public MyViewHolder(CardView container) {
             super(container);
@@ -193,14 +210,14 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
             this.frontcontent = container.findViewById(R.id.frontcontent);
             this.text_comment = container.findViewById(R.id.text_comment);
             this.text_like = container.findViewById(R.id.text_like);
-            this.text_subscribe = container.findViewById(R.id.text_subscribe);
+            this.text_progress = container.findViewById(R.id.text_progress);
             this.imagetitle = container.findViewById(R.id.imagetitle);
             this.comment = container.findViewById(R.id.comment);
             this.like = container.findViewById(R.id.like);
-            this.subscribe = container.findViewById(R.id.subscribe);
+            this.progress = container.findViewById(R.id.progress);
             this.iconcomment = container.findViewById(R.id.iconcomment);
             this.iconlike = container.findViewById(R.id.iconlike);
-            this.iconsubscribe = container.findViewById(R.id.iconsubscribe);
+            this.iconprogress = container.findViewById(R.id.iconprogress);
         }
     }
     public HomeAdapter(Context context, RealmResults<NewsModel> realmResults, boolean automaticUpdate) {

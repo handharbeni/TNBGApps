@@ -1,8 +1,11 @@
 package illiyin.mhandharbeni.utilslibrary;
 
 import android.content.Context;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
 
 /**
  * Created by root on 9/27/17.
@@ -28,6 +31,10 @@ public class SnackBar {
     }
     public SnackBar build(){
         this.snackBar = Snackbar.make(view, message, duration);
+        View view = this.snackBar.getView();
+        CoordinatorLayout.LayoutParams params =(CoordinatorLayout.LayoutParams)view.getLayoutParams();
+        params.gravity = Gravity.TOP;
+        view.setLayoutParams(params);
         return this;
     }
     public SnackBar show(){

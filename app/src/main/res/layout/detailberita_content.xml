@@ -11,6 +11,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/listcontent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -40,7 +41,7 @@
             <WebView
                 android:id="@+id/contenthtml"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></WebView>
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
     <RelativeLayout
@@ -50,6 +51,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/relativeLayout"
         android:layout_alignParentRight="true">
-        <include layout="@layout/itempost_commentlike"/>
+        <include layout="@layout/detailberita_commentlike"/>
     </RelativeLayout>
 </RelativeLayout>

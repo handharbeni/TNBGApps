@@ -78,7 +78,10 @@ public class Crud {
         crudRealm.commitObject();
     }
     public void closeRealm(){
-        crudRealm.closeRealm();
+        if (crudRealm!=null){
+            crudRealm.closeRealm();
+            crudRealm = null;
+        }
     }
     public void update(RealmObject realmObject){
         crudRealm.update(realmObject);

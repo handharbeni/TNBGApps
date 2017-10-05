@@ -10,8 +10,10 @@ import android.os.IBinder;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import illiyin.mhandharbeni.servicemodule.service.intentservice.ChildService;
 import illiyin.mhandharbeni.servicemodule.service.intentservice.NewsService;
 import illiyin.mhandharbeni.servicemodule.service.intentservice.NotifikasiService;
+import illiyin.mhandharbeni.servicemodule.service.intentservice.TrendingService;
 
 /**
  * Created by root on 17/07/17.
@@ -69,6 +71,14 @@ public class MainService extends Service {
                     }
                     if (!checkIsRunning(NotifikasiService.class)){
                         Intent is = new Intent(getBaseContext(), NotifikasiService.class);
+                        startService(is);
+                    }
+                    if (!checkIsRunning(TrendingService.class)){
+                        Intent is = new Intent(getBaseContext(), TrendingService.class);
+                        startService(is);
+                    }
+                    if (!checkIsRunning(ChildService.class)){
+                        Intent is = new Intent(getBaseContext(), ChildService.class);
                         startService(is);
                     }
                 }

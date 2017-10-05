@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:id="@+id/iconprogress"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:maxWidth="50dp"
+        android:maxHeight="50dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:padding="@dimen/paddingitem"
+        android:id="@+id/progress"
+        android:src="@drawable/progress"/>
+    <TextView
+        android:textColor="@color/textBlack"
+        android:id="@+id/text_progress"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/placeholder_progress"/>
+</LinearLayout>

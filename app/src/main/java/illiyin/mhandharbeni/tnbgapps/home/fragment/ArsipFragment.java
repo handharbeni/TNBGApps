@@ -81,6 +81,7 @@ public class ArsipFragment extends Fragment {
     }
     @Override
     public void onPause() {
+        crud.closeRealm();
         super.onPause();
     }
 
@@ -91,6 +92,7 @@ public class ArsipFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        crud.closeRealm();
         super.onDestroy();
     }
 

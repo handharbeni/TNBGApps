@@ -55,6 +55,7 @@ public class HomeFragment extends Fragment implements RealmRecyclerView.OnRefres
     }
     @Override
     public void onPause() {
+        crud.closeRealm();
         super.onPause();
     }
 
@@ -65,11 +66,13 @@ public class HomeFragment extends Fragment implements RealmRecyclerView.OnRefres
 
     @Override
     public void onStop() {
+        crud.closeRealm();
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
+        crud.closeRealm();
         super.onDestroy();
     }
 

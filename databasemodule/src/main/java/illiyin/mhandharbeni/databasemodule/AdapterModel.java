@@ -2,12 +2,14 @@ package illiyin.mhandharbeni.databasemodule;
 
 import android.content.Context;
 import android.os.StrictMode;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import illiyin.mhandharbeni.networklibrary.CallHttp;
 import illiyin.mhandharbeni.realmlibrary.Crud;
@@ -19,6 +21,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by root on 17/07/17.
@@ -72,6 +76,135 @@ public class AdapterModel implements SessionListener{
             return false;
         }
     }
+    public void checkChild(){
+        NewsModel newsModel = new NewsModel();
+        Crud crudNewsModel = new Crud(context, newsModel);
+        RealmResults resultNews = crudNewsModel.read();
+        if (resultNews.size() > 0){
+            for (int i=0;i<resultNews.size();i++){
+                NewsModel nm = (NewsModel) resultNews.get(i);
+                if (nm.getChild() > 0){
+                    /*have an child*/
+                    try {
+                        fetchChild(nm.getId(), "https://api.tnbg.news/api/posts?page=1&limit=20000&parent_id="+nm.getId());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        crudNewsModel.closeRealm();
+    }
+    private void fetchChild(int post_id, String url) throws IOException, JSONException {
+        ChildModel childModel = new ChildModel();
+        Crud crudChildModel = new Crud(context, childModel);
+        String response = "";
+        String login = session.getCustomParams("username", "nothing");
+        if (login.equalsIgnoreCase("nothing")){
+            response = callHttp.get(url);
+        }else{
+            response = getChild(url);
+        }
+        if (!response.equalsIgnoreCase("")){
+            JSONObject objectResponse = new JSONObject(response);
+            if (objectResponse.getBoolean("success")){
+                JSONArray arrayData = objectResponse.getJSONArray("data");
+                if (arrayData.length() > 0){
+                    for (int i=0;i<arrayData.length();i++){
+                        JSONObject objectData = arrayData.getJSONObject(i);
+                        int id = objectData.getInt("id");
+                        String title = objectData.getString("title");
+                        String slug = objectData.getString("slug");
+                        String sort = objectData.getString("sort");
+                        String content = objectData.getString("content");
+                        String excerpt = objectData.getString("excerpt");
+                        int comment_status = objectData.getInt("comment_status");
+                        int publish = objectData.getInt("publish");
+                        int comment_count = objectData.getInt("comment_count");
+                        String hashtag = objectData.getString("hashtag");
+//                        int tags = objectData.getInt("tags");
+                        int like_count = objectData.getInt("like_count");
+                        int status = objectData.getInt("status");
+                        int child = objectData.getInt("child");
+//                        int categories = objectData.getInt("categories");
+                        Boolean liked = objectData.getBoolean("liked");
+                        Boolean subscribe = objectData.getBoolean("subscribe");
+                        String medias;
+                        JSONArray arrayMedia = objectData.getJSONArray("medias");
+                        if (arrayMedia.length() > 0) {
+                            JSONObject objectMedia = arrayMedia.getJSONObject(0);
+                            medias = "https://" + objectMedia.getString("src").replace("\\", "").replaceAll("//cdn", "cdn");
+                        }else{
+                            medias = "nothing";
+                        }
+                        String created_at = objectData.getString("created_at");
+                        String published_at = objectData.getString("published_at");
+                        String updated_at = objectData.getString("updated_at");
+                        if (crudChildModel.checkDuplicate("id", id)){
+                            RealmResults results = crudChildModel.read("id", id);
+                            if (results.size() > 0){
+                                ChildModel cmresult = (ChildModel) results.get(0);
+                                if (!updated_at.equalsIgnoreCase(cmresult.getUpdated_at())){
+                                    Log.d(TAG, "fetchChild: Insert "+String.valueOf(post_id));
+                                    Log.d(TAG, "fetchChild: Update "+title);
+                                    /* update */
+                                    crudChildModel.openObject();
+                                    cmresult.setId(id);
+                                    cmresult.setPost_id(post_id);
+                                    cmresult.setTitle(title);
+                                    cmresult.setSlug(slug);
+                                    cmresult.setSort(sort);
+                                    cmresult.setContent(content);
+                                    cmresult.setExcerpt(excerpt);
+                                    cmresult.setComment_status(comment_status);
+                                    cmresult.setPublich(publish);
+                                    cmresult.setComment_count(comment_count);
+                                    cmresult.setHashtag(hashtag);
+                                    cmresult.setLike_count(like_count);
+                                    cmresult.setStatus(status);
+                                    cmresult.setChild(child);
+                                    cmresult.setLiked(liked);
+                                    cmresult.setSubscribe(subscribe);
+                                    cmresult.setMedias(medias);
+                                    cmresult.setCreated_at(created_at);
+                                    cmresult.setPublished_at(published_at);
+                                    cmresult.setUpdated_at(updated_at);
+                                    crudChildModel.update(cmresult);
+                                    crudChildModel.commitObject();
+                                }
+                            }
+                        }else{
+                            ChildModel cm = new ChildModel();
+                            cm.setId(id);
+                            cm.setPost_id(post_id);
+                            cm.setTitle(title);
+                            cm.setSlug(slug);
+                            cm.setSort(sort);
+                            cm.setContent(content);
+                            cm.setExcerpt(excerpt);
+                            cm.setComment_status(comment_status);
+                            cm.setPublich(publish);
+                            cm.setComment_count(comment_count);
+                            cm.setHashtag(hashtag);
+                            cm.setLike_count(like_count);
+                            cm.setStatus(status);
+                            cm.setChild(child);
+                            cm.setLiked(liked);
+                            cm.setSubscribe(subscribe);
+                            cm.setMedias(medias);
+                            cm.setCreated_at(created_at);
+                            cm.setPublished_at(published_at);
+                            cm.setUpdated_at(updated_at);
+                            crudChildModel.create(cm);
+                        }
+                    }
+                }
+            }
+        }
+        crudChildModel.closeRealm();
+    }
     public Boolean syncNewsPaging(String url) throws IOException {
         NewsModel newsModel = new NewsModel();
         Crud crudNews = new Crud(context, newsModel);
@@ -123,6 +256,8 @@ public class AdapterModel implements SessionListener{
                                     if (arrayMedia.length() > 0) {
                                         JSONObject objectMedia = arrayMedia.getJSONObject(0);
                                         itemModel.setMedias("https://" + objectMedia.getString("src").replace("\\", "").replaceAll("//cdn", "cdn"));
+                                    }else{
+                                        itemModel.setMedias("nothing");
                                     }
                                     crudNews.update(itemModel);
                                     crudNews.commitObject();
@@ -153,6 +288,8 @@ public class AdapterModel implements SessionListener{
                                     if (arrayMedia.length() > 0) {
                                         JSONObject objectMedia = arrayMedia.getJSONObject(0);
                                         itemModel.setMedias("https://" + objectMedia.getString("src").replace("\\", "").replaceAll("//cdn", "cdn"));
+                                    }else{
+                                        itemModel.setMedias("nothing");
                                     }
                                     crudNews.create(itemModel);
                                 }
@@ -277,23 +414,6 @@ public class AdapterModel implements SessionListener{
         }
         return true;
     }
-    /*{
-  "success": true,
-  "data": [
-    {
-      "id": 1,
-      "user_id": 1,
-      "content": "<strong>xtwoend</strong> Telah menyebut anda di kolom komentar pada berita <strong>Geledah Sejumlah Tempat di Malang, KPK Bawa Dokumen APBD</storng>",
-      "link": "/geledah-sejumlah-tempat-di-malang-kpk-bawa-dokumen-apbd#comment-13",
-      "created_at": "2017-08-14 17:22:10",
-      "updated_at": "2017-08-17 12:59:38",
-      "read": 1
-    }
-  ],
-  "meta": {
-    "count": 0
-  }
-}*/
     public void syncNotifikasi(){
         String login = session.getCustomParams("username", "nothing");
         if (!login.equalsIgnoreCase("nothing")){
@@ -390,4 +510,20 @@ public class AdapterModel implements SessionListener{
         String responseString = response.body().string();
         return responseString;
     }
+    public String getChild(String url) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, "");
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .addHeader("cookie", "__cfduid=d89a508a0b4acae97f6e3b78192b948b41504498596")
+                .addHeader("content-type", "application/json")
+                .addHeader("authorization", "Bearer "+session.getCustomParams("token", ""))
+                .build();
+        Response response = client.newCall(request).execute();
+        String responseString = response.body().string();
+        return responseString;
+    }
+
 }

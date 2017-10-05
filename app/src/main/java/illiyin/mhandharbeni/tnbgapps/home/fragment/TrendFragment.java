@@ -80,6 +80,7 @@ public class TrendFragment extends Fragment implements RealmRecyclerView.OnRefre
     }
     @Override
     public void onPause() {
+        crud.closeRealm();
         super.onPause();
     }
 

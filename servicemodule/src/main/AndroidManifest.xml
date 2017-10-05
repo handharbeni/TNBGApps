@@ -6,5 +6,7 @@
         <service android:name=".service.intentservice.NewsService"/>
         <service android:name=".service.intentservice.LoadMoreService"/>
         <service android:name=".service.intentservice.NotifikasiService"/>
+        <service android:name=".service.intentservice.TrendingService"/>
+        <service android:name=".service.intentservice.ChildService"/>
     </application>
 </manifest>

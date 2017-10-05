@@ -130,6 +130,8 @@ public class NavigationActivity extends AppCompatActivity
                 navigationView.inflateMenu(R.menu.nav_signin);
             }
         }else{
+            headersub.setVisibility(View.VISIBLE);
+            headertitle.setText(getString(R.string.app_name));
             headersub.setVisibility(View.GONE);
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.nav_signout);
@@ -297,6 +299,8 @@ public class NavigationActivity extends AppCompatActivity
         String login = session.getCustomParams("username", "nothing");
         if (!login.equalsIgnoreCase("nothing")){
             headersub.setVisibility(View.VISIBLE);
+            headertitle.setText(session.getCustomParams("username", "NOTHING"));
+            headersub.setText(session.getCustomParams("email", "-"));
             if (hideNavActivation()){
                 navigationView.getMenu().clear();
                 navigationView.inflateMenu(R.menu.nav_signin_activation);
@@ -305,6 +309,7 @@ public class NavigationActivity extends AppCompatActivity
                 navigationView.inflateMenu(R.menu.nav_signin);
             }
         }else{
+            headertitle.setText(getString(R.string.app_name));
             headersub.setVisibility(View.GONE);
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.nav_signout);

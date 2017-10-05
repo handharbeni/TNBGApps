@@ -8,6 +8,7 @@
     <string name="placeholder_comment">Comment</string>
     <string name="placeholder_like">Like</string>
     <string name="placeholder_onprogress">On Progress</string>
+    <string name="placeholder_oncomplete">Complete</string>
     <string name="placeholder_subscribe">Subscribe</string>
     <string name="placeholder_trending">#trending</string>
     <string name="placeholder_cariberita">Search News</string>
@@ -38,5 +39,8 @@
     <string name="placeholder_komentar">Tulis Komentar</string>
     <string name="placeholder_activation">Activation Code</string>
     <string name="placeholder_doactivated">Submit</string>
+    <string name="placeholder_share">Share</string>
+    <string name="placeholder_progress">Progress</string>
+    <string name="placeholder_updatebaru">Update Terbaru</string>
 
 </resources>

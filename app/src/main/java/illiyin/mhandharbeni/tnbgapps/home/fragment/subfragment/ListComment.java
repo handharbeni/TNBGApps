@@ -166,6 +166,18 @@ public class ListComment extends AppCompatActivity implements RealmRecyclerView.
     }
 
     @Override
+    protected void onPause() {
+        crud.closeRealm();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        crud.closeRealm();
+        super.onDestroy();
+    }
+
+    @Override
     public void sessionChange() {
 
     }
