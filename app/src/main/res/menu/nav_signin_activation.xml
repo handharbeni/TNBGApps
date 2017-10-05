@@ -29,7 +29,7 @@
                 android:icon="@drawable/logout"
                 android:title="Logout" />
             <item android:id="@+id/nav_activation"
-                android:icon="@drawable/back"
+                android:icon="@drawable/icon_aktivasi"
                 android:title="Account Activation"/>
         </menu>
     </item>
