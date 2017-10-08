@@ -12,7 +12,6 @@ import android.widget.TextView;
 import illiyin.mhandharbeni.sessionlibrary.Session;
 import illiyin.mhandharbeni.sessionlibrary.SessionListener;
 import illiyin.mhandharbeni.tnbgapps.R;
-import illiyin.mhandharbeni.tnbgapps.akun.Login;
 
 /**
  * Created by root on 10/4/17.

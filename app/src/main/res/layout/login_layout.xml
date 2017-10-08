@@ -23,6 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <Button
+            android:textColor="@color/textWhite"
+            android:background="@drawable/button_selector"
             android:id="@+id/signin"
             android:layout_marginTop="@dimen/paddingitem"
             android:layout_width="match_parent"

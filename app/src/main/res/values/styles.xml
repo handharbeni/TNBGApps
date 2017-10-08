@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <style name="AppTheme" parent="ThemeOverlay.AppCompat.Dark">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -6,7 +6,7 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="android:itemBackground">@color/greyCustom</item>
         <item name="searchViewStyle">@style/AppTheme.SearchViewStyle</item>
-        <item name="android:textColorHint">@color/blueCustom</item>
+        <item name="android:textColorHint">@color/greyCustom</item>
         <item name="android:textColorHighlight">@color/blueCustom</item>
         <item name="android:textCursorDrawable">@drawable/text_cursor</item>
     </style>
@@ -19,7 +19,7 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="android:itemBackground">@color/greyCustom</item>
         <item name="searchViewStyle">@style/AppTheme.SearchViewStyle</item>
-        <item name="android:textColorHint">@color/blueCustom</item>
+        <item name="android:textColorHint">@color/greyCustom</item>
         <item name="android:textColorHighlight">@color/blueCustom</item>
         <item name="colorControlNormal">@color/greyCustom</item>
         <item name="android:textCursorDrawable">@drawable/text_cursor</item>

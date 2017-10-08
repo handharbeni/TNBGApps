@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import illiyin.mhandharbeni.databasemodule.NewsModel;
@@ -15,11 +14,8 @@ import illiyin.mhandharbeni.realmlibrary.Crud;
 import illiyin.mhandharbeni.sessionlibrary.Session;
 import illiyin.mhandharbeni.sessionlibrary.SessionListener;
 import illiyin.mhandharbeni.tnbgapps.R;
-import illiyin.mhandharbeni.tnbgapps.home.adapter.HomeAdapter;
 import illiyin.mhandharbeni.tnbgapps.search.adapter.SearchAdapter;
-import io.realm.Case;
 import io.realm.RealmResults;
-import io.realm.Sort;
 
 import static android.content.ContentValues.TAG;
 

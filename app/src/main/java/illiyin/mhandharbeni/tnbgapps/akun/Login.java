@@ -3,10 +3,8 @@ package illiyin.mhandharbeni.tnbgapps.akun;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,19 +13,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import illiyin.mhandharbeni.networklibrary.CallHttp;
 import illiyin.mhandharbeni.sessionlibrary.Session;
 import illiyin.mhandharbeni.sessionlibrary.SessionListener;
-import illiyin.mhandharbeni.tnbgapps.NavigationActivity;
 import illiyin.mhandharbeni.tnbgapps.R;
 import illiyin.mhandharbeni.tnbgapps.home.HomeMain;
-import illiyin.mhandharbeni.tnbgapps.home.fragment.HomeFragment;
 import illiyin.mhandharbeni.utilslibrary.SnackBar;
+import illiyin.mhandharbeni.utilslibrary.SnackBarListener;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 import static android.content.ContentValues.TAG;
@@ -36,7 +31,7 @@ import static android.content.ContentValues.TAG;
  * Created by root on 9/13/17.
  */
 
-public class Login extends Fragment implements SessionListener {
+public class Login extends Fragment implements SessionListener, SnackBarListener {
     View v;
     private Session session;
 
@@ -86,36 +81,44 @@ public class Login extends Fragment implements SessionListener {
     }
 
     public void do_login(){
-        showDialog();
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                sentToServer("https://api.tnbg.news/api/auth");
-            }
-        });
+        if (username.getText().toString().isEmpty()){
+            username.setError("Tidak Boleh Kosong");
+        }else if(password.getText().toString().isEmpty()){
+            password.setError("Tidak Boleh Kosong");
+        }else{
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showDialog();
+                    sentToServer("https://api.tnbg.news/api/auth");
+                }
+            });
+        }
     }
     private void showDialog(){
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                signin.setEnabled(false);
-                signin.setText("Loginin..");
-                dialog = new ProgressDialog(getActivity());
-                dialog.setCancelable(false);
-                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                dialog.show();
-            }
-        });
+        signin.setEnabled(false);
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                signin.setEnabled(false);
+//                signin.setText("Loginin..");
+//                dialog = new ProgressDialog(getActivity());
+//                dialog.setCancelable(false);
+//                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//                dialog.show();
+//            }
+//        });
     }
     private void dismissDialog(){
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                signin.setEnabled(true);
-                signin.setText(getString(R.string.placeholder_signin));
-                dialog.dismiss();
-            }
-        });
+        signin.setEnabled(true);
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                signin.setEnabled(true);
+//                signin.setText(getString(R.string.placeholder_signin));
+//                dialog.dismiss();
+//            }
+//        });
     }
     private void sentToServer(String url){
         try {
@@ -123,8 +126,6 @@ public class Login extends Fragment implements SessionListener {
             json = new JSONObject();
             json.put("username", username.getText().toString());
             json.put("password", password.getText().toString());
-
-            Log.d(TAG, "sentToServer: "+json.toString());
 
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             RequestBody body = RequestBody.create(JSON, json.toString());
@@ -148,23 +149,25 @@ public class Login extends Fragment implements SessionListener {
                 session.setCustomParams("phone", sPhone);
                 session.setCustomParams("token", sToken);
                 session.setCustomParams("status", iStatus);
-                dismissDialog();
                 if (from.equalsIgnoreCase("nav")){
+                    showSnackBar(v, "Login Berhasil");
                     FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.mainframe, new HomeMain());
                     ft.commit();
                 }else{
+                    showSnackBar(v, "Login Berhasil");
                     getActivity().finish();
                 }
-
+                showSnackBar(v, "Login Berhasil");
             }else{
-                dismissDialog();
-                showSnackBar(v, "Login Gagal");
+                if (jsonResponse.getString("message").equalsIgnoreCase("invalid_credentials")){
+                    showSnackBar(v, "Username / Password tidak ditemukan");
+                }
+
             }
         } catch (Exception ex) {
-            dismissDialog();
-            showSnackBar(v, "Login Gagal");
-            Log.d(TAG, "sentToServer: "+ex.toString());
+            showSnackBar(v, "Tidak ada koneksi");
+
         }
     }
     public void showSnackBar(View v, String message){
@@ -172,9 +175,15 @@ public class Login extends Fragment implements SessionListener {
                 .view(v)
                 .message(message)
                 .build()
+                .listener(this)
                 .show();
     }
     @Override
     public void sessionChange() {
+    }
+
+    @Override
+    public void onDismiss() {
+        dismissDialog();
     }
 }

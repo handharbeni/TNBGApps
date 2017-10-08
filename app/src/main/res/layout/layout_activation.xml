@@ -1,28 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <include layout="@layout/detailberita_appbar"
-        android:id="@+id/include" />
-    <LinearLayout
-        android:layout_below="@+id/include"
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent" android:paddingLeft="@dimen/paddingitem" android:paddingRight="@dimen/paddingitem" android:paddingTop="@dimen/paddingitem">
-        <EditText
-            android:textCursorDrawable="@drawable/text_cursor"
-            android:inputType="number"
-            android:layout_marginTop="@dimen/paddingitem"
-            android:singleLine="true"
-            android:id="@+id/activationcode"
-            android:hint="@string/placeholder_activation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <Button
-            android:id="@+id/actived"
-            android:layout_marginTop="@dimen/paddingitem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/placeholder_doactivated"/>
-    </LinearLayout>
-</RelativeLayout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rlactivation"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/detailberita_appbar"
+            android:id="@+id/include" />
+        <LinearLayout
+            android:layout_below="@+id/include"
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:layout_height="match_parent" android:paddingLeft="@dimen/paddingitem" android:paddingRight="@dimen/paddingitem" android:paddingTop="@dimen/paddingitem">
+            <EditText
+                android:gravity="center"
+                android:textCursorDrawable="@drawable/text_cursor"
+                android:inputType="textCapCharacters"
+                android:layout_marginTop="@dimen/paddingitem"
+                android:singleLine="true"
+                android:id="@+id/activationcode"
+                android:hint="@string/placeholder_activation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <Button
+                android:textColor="@color/textWhite"
+                android:background="@drawable/button_selector"
+                android:id="@+id/actived"
+                android:layout_marginTop="@dimen/paddingitem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/placeholder_doactivated"/>
+        </LinearLayout>
+    </RelativeLayout>
+</FrameLayout>

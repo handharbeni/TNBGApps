@@ -211,8 +211,10 @@ public class AdapterModel implements SessionListener{
         String response = "";
         String login = session.getCustomParams("username", "nothing");
         if (login.equalsIgnoreCase("nothing")){
+            Log.d(TAG, "syncNewsPaging: Not Login");
             response = callHttp.get(url);
         }else{
+            Log.d(TAG, "syncNewsPaging: Login");
             response = getNews(url);
         }
         try {
@@ -227,39 +229,40 @@ public class AdapterModel implements SessionListener{
                             for (int i = 0; i < arrayData.length(); i++) {
 
                                 JSONObject itemNews = arrayData.getJSONObject(i);
+                                Log.d(TAG, "syncNewsPaging: "+String.valueOf(itemNews.getBoolean("liked")));
                                 RealmResults results = crudNews.read("id", itemNews.getInt("id"));
                                 if (results.size() > 0) {
                                     NewsModel checkModel = (NewsModel) results.get(0);
                                     //                            if (!checkModel.getUpdate_at().equalsIgnoreCase(itemNews.getString("updated_at"))){
                                     crudNews.openObject();
-                                    NewsModel itemModel = new NewsModel();
-                                    itemModel.setId(itemNews.getInt("id"));
-                                    itemModel.setTitle(itemNews.getString("title"));
-                                    itemModel.setSlug(itemNews.getString("slug"));
-                                    itemModel.setSort(itemNews.getString("sort"));
-                                    itemModel.setContent(itemNews.getString("content"));
-                                    itemModel.setExcerpt(itemNews.getString("excerpt"));
-                                    itemModel.setComment_status(itemNews.getInt("comment_status"));
-                                    itemModel.setPublish(itemNews.getInt("publish"));
-                                    itemModel.setComment_count(itemNews.getInt("comment_count"));
-                                    itemModel.setHashtag(itemNews.getString("hashtag"));
-                                    itemModel.setLike_count(itemNews.getInt("like_count"));
-                                    itemModel.setStatus(itemNews.getInt("status"));
-                                    itemModel.setChild(itemNews.getInt("child"));
-                                    itemModel.setLiked(itemNews.getBoolean("liked"));
-                                    itemModel.setSubscribe(itemNews.getBoolean("subscribe"));
-                                    itemModel.setCreated_at(itemNews.getString("created_at"));
-                                    itemModel.setPublished_at(itemNews.getString("published_at"));
-                                    itemModel.setUpdate_at(itemNews.getString("updated_at"));
+//                                    NewsModel itemModel = new NewsModel();
+//                                    checkModel.setId(itemNews.getInt("id"));
+                                    checkModel.setTitle(itemNews.getString("title"));
+                                    checkModel.setSlug(itemNews.getString("slug"));
+                                    checkModel.setSort(itemNews.getString("sort"));
+                                    checkModel.setContent(itemNews.getString("content"));
+                                    checkModel.setExcerpt(itemNews.getString("excerpt"));
+                                    checkModel.setComment_status(itemNews.getInt("comment_status"));
+                                    checkModel.setPublish(itemNews.getInt("publish"));
+                                    checkModel.setComment_count(itemNews.getInt("comment_count"));
+                                    checkModel.setHashtag(itemNews.getString("hashtag"));
+                                    checkModel.setLike_count(itemNews.getInt("like_count"));
+                                    checkModel.setStatus(itemNews.getInt("status"));
+                                    checkModel.setChild(itemNews.getInt("child"));
+                                    checkModel.setLiked(itemNews.getBoolean("liked"));
+                                    checkModel.setSubscribe(itemNews.getBoolean("subscribe"));
+                                    checkModel.setCreated_at(itemNews.getString("created_at"));
+                                    checkModel.setPublished_at(itemNews.getString("published_at"));
+                                    checkModel.setUpdate_at(itemNews.getString("updated_at"));
 
                                     JSONArray arrayMedia = itemNews.getJSONArray("medias");
                                     if (arrayMedia.length() > 0) {
                                         JSONObject objectMedia = arrayMedia.getJSONObject(0);
-                                        itemModel.setMedias("https://" + objectMedia.getString("src").replace("\\", "").replaceAll("//cdn", "cdn"));
+                                        checkModel.setMedias("https://" + objectMedia.getString("src").replace("\\", "").replaceAll("//cdn", "cdn"));
                                     }else{
-                                        itemModel.setMedias("nothing");
+                                        checkModel.setMedias("nothing");
                                     }
-                                    crudNews.update(itemModel);
+                                    crudNews.update(checkModel);
                                     crudNews.commitObject();
                                     //                            }
 

@@ -69,7 +69,10 @@ public class ChangePassword extends Fragment implements SessionListener {
             /*do logout*/
             session.setCustomParams("LOGINSTATES", "false");
             session.deleteSession();
+            Bundle bundleLogin = new Bundle();
+            bundleLogin.putString("from", "nav");
             Fragment fragment = new Login();
+            fragment.setArguments(bundleLogin);
             changeFragment(fragment, true, "login");
 
         }else{

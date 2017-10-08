@@ -3,6 +3,7 @@ package illiyin.mhandharbeni.tnbgapps.home.fragment.subfragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import illiyin.mhandharbeni.databasemodule.AdapterModel;
 import illiyin.mhandharbeni.databasemodule.KomentarModel;
+import illiyin.mhandharbeni.databasemodule.NewsModel;
 import illiyin.mhandharbeni.networklibrary.CallHttp;
 import illiyin.mhandharbeni.realmlibrary.Crud;
 import illiyin.mhandharbeni.sessionlibrary.Session;
@@ -25,6 +27,7 @@ import illiyin.mhandharbeni.tnbgapps.R;
 import illiyin.mhandharbeni.tnbgapps.akun.MainAccount;
 import illiyin.mhandharbeni.tnbgapps.home.adapter.KomentarAdapter;
 import illiyin.mhandharbeni.utilslibrary.AttributeUtils;
+import illiyin.mhandharbeni.utilslibrary.SnackBar;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -45,13 +48,21 @@ public class ListComment extends AppCompatActivity implements RealmRecyclerView.
     private EditText komentar;
     private Button kirim;
     private Session session;
+    private NewsModel newsModel;
+    private Crud crudNewsModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         session = new Session(getApplicationContext(), this);
+
+        newsModel = new NewsModel();
+        crudNewsModel = new Crud(getApplicationContext(), newsModel);
+
         komentarModel  = new KomentarModel();
         crud = new Crud(getApplicationContext(), komentarModel);
+
+
         callHttp = new CallHttp(getApplicationContext());
 
         idBerita = getIntent().getStringExtra("idBerita");
@@ -109,15 +120,33 @@ public class ListComment extends AppCompatActivity implements RealmRecyclerView.
             object.put("content", komentar.getText().toString());
             String url = "https://api.tnbg.news/api/comments";
             AttributeUtils attributeUtils = new AttributeUtils(getApplicationContext());
-            attributeUtils.koment(url, object.toString());
+            Boolean returns = attributeUtils.koment(url, object.toString());
+            if (returns){
+                /*insert berhasil*/
+                updateCommentNews(Integer.valueOf(idBerita));
+            }else{
+                /*insert gagal*/
+                showSnackBar("Gagal mengirim komentar");
+            }
             komentar.setText("");
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
     }
+    private void updateCommentNews(int id){
+        RealmResults results = crudNewsModel.read("id", id);
+
+        NewsModel nm = (NewsModel) results.get(0);
+        int lastCount = nm.getComment_count();
+
+        crudNewsModel.openObject();
+        nm.setComment_count(lastCount+1);
+        crudNewsModel.commitObject();
+    }
     private void init_adapter(){
-        Realm realm = Realm.getInstance(Realm.getDefaultConfiguration());
-        RealmResults<KomentarModel> komenModel = crud.read("post_id", Integer.valueOf(idBerita));
+//        Realm realm = Realm.getInstance(Realm.getDefaultConfiguration());
+//        RealmResults<KomentarModel> komenModel = crud.read("post_id", Integer.valueOf(idBerita));
+        RealmResults komenModel = crud.read("post_id", Integer.valueOf(idBerita));
         komentarAdapter = new KomentarAdapter(getApplicationContext(), komenModel, true);
         listkomentar.setAdapter(komentarAdapter);
     }
@@ -131,6 +160,12 @@ public class ListComment extends AppCompatActivity implements RealmRecyclerView.
             e.printStackTrace();
             return false;
         }
+    }
+    private void showSnackBar(String message){
+        new SnackBar(getApplicationContext()).view(findViewById(R.id.rlkoment))
+                .message(message)
+                .build(Gravity.BOTTOM)
+                .show();
     }
     private void reloadComments(){
         try {

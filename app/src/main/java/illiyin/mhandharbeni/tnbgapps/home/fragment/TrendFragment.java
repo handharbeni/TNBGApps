@@ -2,35 +2,22 @@ package illiyin.mhandharbeni.tnbgapps.home.fragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import illiyin.mhandharbeni.databasemodule.AdapterModel;
-import illiyin.mhandharbeni.databasemodule.NewsModel;
 import illiyin.mhandharbeni.databasemodule.TrendingModel;
 import illiyin.mhandharbeni.realmlibrary.Crud;
 import illiyin.mhandharbeni.tnbgapps.R;
-import illiyin.mhandharbeni.tnbgapps.home.adapter.HomeAdapter;
 import illiyin.mhandharbeni.tnbgapps.home.adapter.TrendingAdapter;
-import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by root on 9/5/17.

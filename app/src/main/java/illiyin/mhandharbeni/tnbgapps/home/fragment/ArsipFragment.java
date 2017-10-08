@@ -4,11 +4,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +15,7 @@ import illiyin.mhandharbeni.databasemodule.NewsModel;
 import illiyin.mhandharbeni.realmlibrary.Crud;
 import illiyin.mhandharbeni.tnbgapps.R;
 import illiyin.mhandharbeni.tnbgapps.home.adapter.ArsipAdapter;
-import illiyin.mhandharbeni.tnbgapps.home.adapter.HomeAdapter;
 import io.realm.RealmResults;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by root on 9/5/17.

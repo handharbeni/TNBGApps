@@ -7,7 +7,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -235,7 +234,7 @@ public class DetailBerita extends AppCompatActivity implements SessionListener {
 
                 RelativeLayout rl = new RelativeLayout(this);
                 rl.setPadding(30,30,30,30);
-                rl.setBackground(getDrawable(R.color.textWhite));
+                rl.setBackground(getResources().getDrawable(R.color.textWhite));
 
                 TextView txtTanggal = new TextView(this);
                 txtTanggal.setGravity(View.TEXT_ALIGNMENT_CENTER);
@@ -246,9 +245,14 @@ public class DetailBerita extends AppCompatActivity implements SessionListener {
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
                 TextView txtStatus = new TextView(this);
-                txtStatus.setBackground(getDrawable(R.drawable.roundcorner_onprogress));
+                txtStatus.setBackground(getResources().getDrawable(R.drawable.roundcorner_onprogress));
                 newParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
-                newParams.addRule(RelativeLayout.ALIGN_PARENT_END, 1);
+                final boolean hasSdk17 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
+                if (hasSdk17){
+                    newParams.addRule(RelativeLayout.ALIGN_PARENT_END, 1);
+                }else{
+                    newParams.addRule(RelativeLayout.ALIGN_RIGHT, 1);
+                }
                 txtStatus.setLayoutParams(newParams);
                 txtStatus.setPadding(8,8,8,8);
                 txtStatus.setText("Complete");
@@ -261,8 +265,8 @@ public class DetailBerita extends AppCompatActivity implements SessionListener {
                 txtTitle.setText(resultChildModel.getTitle());
                 txtTitle.setTextSize(20);
                 txtTitle.setPadding(15,15,15,15);
-                txtTitle.setTextColor(getColor(R.color.textBlack));
-                txtTitle.setBackground(getDrawable(R.color.textWhite));
+                txtTitle.setTextColor(getResources().getColor(R.color.textBlack));
+                txtTitle.setBackground(getResources().getDrawable(R.color.textWhite));
                 listcontent.addView(txtTitle);
 
                 WebView wv = new WebView(this);

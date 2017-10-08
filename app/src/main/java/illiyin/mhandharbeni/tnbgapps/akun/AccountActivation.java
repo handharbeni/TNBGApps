@@ -1,9 +1,8 @@
 package illiyin.mhandharbeni.tnbgapps.akun;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,12 +19,13 @@ import illiyin.mhandharbeni.sessionlibrary.SessionListener;
 import illiyin.mhandharbeni.tnbgapps.R;
 import illiyin.mhandharbeni.utilslibrary.AttributeUtils;
 import illiyin.mhandharbeni.utilslibrary.SnackBar;
+import illiyin.mhandharbeni.utilslibrary.SnackBarListener;
 
 /**
  * Created by root on 9/26/17.
  */
 
-public class AccountActivation extends AppCompatActivity implements SessionListener {
+public class AccountActivation extends AppCompatActivity implements SessionListener, SnackBarListener {
     private static final String TAG = "AccounActivation";
     private Session session;
     private AttributeUtils attributeUtils;
@@ -56,23 +56,19 @@ public class AccountActivation extends AppCompatActivity implements SessionListe
         actived.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                actived.setEnabled(false);
                 do_activated();
             }
         });
     }
     private void do_activated(){
-//        if (activationcode.getText().toString().equalsIgnoreCase(session.getCustomParams("code", "nothing"))){
-//            /*aktivasi code sama*/
-            try {
-                sentServer();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-//        }else{
-//            Log.d(TAG, "do_activated: Code Tidak Valid");
-//        }
+        try {
+            sentServer();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     private void sentServer() throws JSONException, IOException {
         JSONObject objectBody = new JSONObject();
@@ -83,17 +79,33 @@ public class AccountActivation extends AppCompatActivity implements SessionListe
         if (objectResponse.getBoolean("success")){
             String message = objectResponse.getString("message");
             if (message.equalsIgnoreCase("Aktivasi selesai")){
-                session.setCustomParams("LOGINSTATES", "false");
-                session.deleteSession();
+                session.setCustomParams("status", 1);
+//                session.setCustomParams("LOGINSTATES", "false");
+//                session.deleteSession();
+                showSnackBar(findViewById(R.id.rlactivation), "Aktivasi Selesai");
                 finish();
+            }else{
+                showSnackBar(findViewById(R.id.rlactivation), "Aktivasi Gagal");
             }
+        }else{
+            showSnackBar(findViewById(R.id.rlactivation), "Aktivasi Gagal");
         }
     }
-    private void showSnackBar(View v, String message){
-        new SnackBar(getApplicationContext()).view(v).message(message).build().show();
+    public void showSnackBar(View v, String message){
+        new SnackBar(this)
+                .view(v)
+                .message(message)
+                .build()
+                .listener(this)
+                .show();
     }
     @Override
     public void sessionChange() {
 
+    }
+
+    @Override
+    public void onDismiss() {
+        actived.setEnabled(true);
     }
 }

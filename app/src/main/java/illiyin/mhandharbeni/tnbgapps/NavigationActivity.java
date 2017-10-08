@@ -18,18 +18,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 
 import illiyin.mhandharbeni.servicemodule.ServiceAdapter;
 import illiyin.mhandharbeni.sessionlibrary.Session;
@@ -41,11 +33,6 @@ import illiyin.mhandharbeni.tnbgapps.home.HomeMain;
 import illiyin.mhandharbeni.tnbgapps.kontak.MainKontak;
 import illiyin.mhandharbeni.tnbgapps.notifikasi.MainNotifikasi;
 import illiyin.mhandharbeni.tnbgapps.search.SearchMain;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener, SessionListener {

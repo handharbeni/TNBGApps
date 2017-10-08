@@ -1,8 +1,10 @@
 package illiyin.mhandharbeni.tnbgapps.home.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.text.ParseException;
 
 import illiyin.mhandharbeni.databasemodule.NewsModel;
+import illiyin.mhandharbeni.realmlibrary.Crud;
 import illiyin.mhandharbeni.sessionlibrary.Session;
 import illiyin.mhandharbeni.sessionlibrary.SessionListener;
 import illiyin.mhandharbeni.tnbgapps.R;
@@ -32,12 +35,16 @@ import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by root on 9/12/17.
  */
 
 public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAdapter.MyViewHolder> implements SessionListener {
     private Session session;
+    private NewsModel newsModel;
+    private Crud crud;
     @Override
     public HomeAdapter.MyViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
         View v = inflater.inflate(R.layout.itempost, viewGroup, false);
@@ -58,7 +65,7 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
         myViewHolder.title.setText(m.getTitle());
         myViewHolder.frontcontent.setText(m.getExcerpt());
         myViewHolder.text_comment.setText(m.getComment_count()+" "+getContext().getString(R.string.comment));
-        myViewHolder.text_like.setText(m.getLike_count()+"  "+getContext().getString(R.string.like));
+        myViewHolder.text_like.setText(m.getLike_count()+" "+getContext().getString(R.string.like));
         myViewHolder.text_progress.setText(m.getChild()+" "+getContext().getString(R.string.placeholder_progress));
 
         if (m.getLiked()){
@@ -70,7 +77,7 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
             myViewHolder.imagetitle.setVisibility(View.GONE);
         }else{
             Glide.with(getContext())
-                    .load(m.getMedias()+"?size=600x338")
+                    .load(m.getMedias()+"?size=900x538")
                     .placeholder(R.drawable.loading)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .skipMemoryCache(false)
@@ -121,7 +128,9 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
         myViewHolder.iconlike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(TAG, "onClick: "+myViewHolder.text_like.getText().toString());
                 try {
+
                     String login = session.getCustomParams("username", "nothing");
                     if (!login.equalsIgnoreCase("nothing")){
                         JSONObject jsonObject = new JSONObject();
@@ -132,15 +141,17 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
                         Boolean success = jsonResponse.getBoolean("success");
                         if (success){
                             String action = jsonResponse.getString("action");
+                            int likeCount = 0;
                             if (action.equalsIgnoreCase("like")){
-                                int likeCount = m.getLike_count()+1;
-                                myViewHolder.text_like.setText(likeCount+"  "+getContext().getString(R.string.like));
+                                likeCount = m.getLike_count()+1;
+                                updateLiked(m.getId(), true, likeCount);
                                 Glide.with(getContext()).load("").placeholder(R.drawable.like_filled).into(myViewHolder.like);
                             }else{
-                                int likeCount = m.getLike_count()-1;
-                                myViewHolder.text_like.setText(likeCount+"  "+getContext().getString(R.string.like));
+                                likeCount = m.getLike_count()-1;
+                                updateLiked(m.getId(), false, likeCount);
                                 Glide.with(getContext()).load("").placeholder(R.drawable.like).into(myViewHolder.like);
                             }
+                            myViewHolder.text_like.setText(String.valueOf(likeCount)+"  "+getContext().getApplicationContext().getString(R.string.like));
                         }
                     }else{
                         Intent i = new Intent(getContext(), MainAccount.class);
@@ -162,38 +173,20 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
                 getContext().startActivity(i);
             }
         });
-//        myViewHolder.iconsubscribe.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                try {
-//                    String login = session.getCustomParams("username", "nothing");
-//                    if (!login.equalsIgnoreCase("nothing")){
-//                        JSONObject jsonObject = new JSONObject();
-//                        jsonObject.put("post_id", m.getId());
-//                        AttributeUtils attributeUtils = new AttributeUtils(getContext());
-//                        String response  = attributeUtils.subscribe("https://api.tnbg.news/api/post/subscribe", jsonObject.toString());
-//                        JSONObject jsonResponse = new JSONObject(response);
-//                        Boolean success = jsonResponse.getBoolean("success");
-//                        if (success){
-//                            myViewHolder.text_subscribe.setText("Subscribed");
-//                        }
-//                    }else{
-//                        Intent i = new Intent(getContext(), MainAccount.class);
-//                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                        getContext().startActivity(i);
-//                    }
-//                } catch (IOException | JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
     }
 
     @Override
     public void sessionChange() {
 
     }
-
+    private void updateLiked(Integer id, Boolean liked, Integer count){
+        RealmResults results = crud.read("id", id);
+        NewsModel nm = (NewsModel) results.get(0);
+        crud.openObject();
+        nm.setLiked(liked);
+        nm.setLike_count(count);
+        crud.commitObject();
+    }
     public class MyViewHolder extends RealmViewHolder {
 
         CardView parentpost;
@@ -223,6 +216,7 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
     public HomeAdapter(Context context, RealmResults<NewsModel> realmResults, boolean automaticUpdate) {
         super(context, realmResults, automaticUpdate, false);
         session = new Session(getContext(), this);
-
+        newsModel = new NewsModel();
+        crud = new Crud(getContext(), newsModel);
     }
 }
