@@ -23,6 +23,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import illiyin.mhandharbeni.databasemodule.NotifikasiModel;
+import illiyin.mhandharbeni.realmlibrary.Crud;
 import illiyin.mhandharbeni.servicemodule.ServiceAdapter;
 import illiyin.mhandharbeni.sessionlibrary.Session;
 import illiyin.mhandharbeni.sessionlibrary.SessionListener;
@@ -189,6 +191,10 @@ public class NavigationActivity extends AppCompatActivity
             Fragment fragment = new MainNotifikasi();
             changeFragment(fragment, true, "Notifikasi");
         }else if(id == R.id.nav_signout){
+            NotifikasiModel nm = new NotifikasiModel();
+            Crud crudNotifikasi = new Crud(getApplicationContext(), nm);
+            crudNotifikasi.deleteAll(nm.getClass());
+            crudNotifikasi.closeRealm();
             session.setCustomParams("LOGINSTATES", "false");
             session.deleteSession();
             Bundle bundleLogin = new Bundle();

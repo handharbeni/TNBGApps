@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content" android:background="@color/textWhite" android:padding="@dimen/paddingtitle">
-    <TextView
-        android:padding="@dimen/paddingtitle"
-        android:text="This is Name"
-        android:textColor="@color/textBlack"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:id="@+id/nama"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:paddingRight="@dimen/paddingtitle"
-        android:paddingLeft="@dimen/paddingtitle"
-        android:paddingBottom="@dimen/paddingtitle"
-        android:text="This is Comment"
-        android:textColor="@color/greyCustom"
-        android:textSize="16sp"
-        android:id="@+id/komen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/items"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:background="@color/textWhite" android:padding="@dimen/paddingtitle">
+        <include layout="@layout/item_headercomment"/>
+        <TextView
+            android:paddingRight="@dimen/paddingtitle"
+            android:paddingLeft="@dimen/paddingtitle"
+            android:paddingBottom="@dimen/paddingtitle"
+            android:text="Comment"
+            android:textColor="@color/greyCustom"
+            android:textSize="16sp"
+            android:id="@+id/komen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <View android:background="@color/greyBorder" android:layout_width="match_parent" android:layout_height="0.5dp" android:layout_below="@+id/items" android:id="@+id/border" android:layout_marginRight="25dp" android:layout_marginLeft="25dp"/>
+</RelativeLayout>

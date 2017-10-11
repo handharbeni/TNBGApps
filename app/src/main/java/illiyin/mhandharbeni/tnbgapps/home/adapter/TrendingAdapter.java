@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import illiyin.mhandharbeni.databasemodule.NewsModel;
 import illiyin.mhandharbeni.databasemodule.TrendingModel;
+import illiyin.mhandharbeni.realmlibrary.Crud;
 import illiyin.mhandharbeni.tnbgapps.R;
 import illiyin.mhandharbeni.tnbgapps.search.SearchClass;
 import io.realm.RealmBasedRecyclerViewAdapter;
@@ -20,9 +22,9 @@ import io.realm.RealmViewHolder;
 
 public class TrendingAdapter extends RealmBasedRecyclerViewAdapter<TrendingModel, TrendingAdapter.ViewHolder> {
 
-
     public TrendingAdapter(Context context, RealmResults<TrendingModel> realmResults, boolean automaticUpdate) {
         super(context, realmResults, automaticUpdate, false);
+
     }
 
     public class ViewHolder extends RealmViewHolder {

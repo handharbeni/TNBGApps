@@ -1,14 +1,22 @@
 package illiyin.mhandharbeni.tnbgapps.home.fragment.subfragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +36,7 @@ import illiyin.mhandharbeni.tnbgapps.akun.MainAccount;
 import illiyin.mhandharbeni.tnbgapps.home.adapter.KomentarAdapter;
 import illiyin.mhandharbeni.utilslibrary.AttributeUtils;
 import illiyin.mhandharbeni.utilslibrary.SnackBar;
+import illiyin.mhandharbeni.utilslibrary.SnackBarListener;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -35,7 +44,7 @@ import io.realm.RealmResults;
  * Created by root on 9/28/17.
  */
 
-public class ListComment extends AppCompatActivity implements RealmRecyclerView.OnRefreshListener, SessionListener {
+public class ListComment extends AppCompatActivity implements RealmRecyclerView.OnRefreshListener, SessionListener, SnackBarListener {
     private static final String TAG = "List Comment";
     private String idBerita;
     private KomentarAdapter komentarAdapter;
@@ -50,6 +59,8 @@ public class ListComment extends AppCompatActivity implements RealmRecyclerView.
     private Session session;
     private NewsModel newsModel;
     private Crud crudNewsModel;
+    private ShimmerFrameLayout shimmer_view_container;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +77,55 @@ public class ListComment extends AppCompatActivity implements RealmRecyclerView.
         callHttp = new CallHttp(getApplicationContext());
 
         idBerita = getIntent().getStringExtra("idBerita");
-        reloadComment();
         setContentView(R.layout.komentar_layout);
-        fetch_element();
-        init_adapter();
+
+        showLoading();
+        loading();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+    private void loading(){
+        Thread fetchTread = new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    super.run();
+                    sleep(2000);
+                    reloadComment();
+                } catch (Exception e) {
+
+                } finally {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            fetch_element();
+                            init_adapter();
+                        }
+                    });
+                }
+            }
+        };
+        fetchTread.start();
+    }
+    private void showLoading(){
+        shimmer_view_container = findViewById(R.id.shimmer_view_container);
+        shimmer_view_container.startShimmerAnimation();
+    }
+    private void hideLoading(){
+        shimmer_view_container.stopShimmerAnimation();
+        shimmer_view_container.setVisibility(View.GONE);
+        listkomentar.setVisibility(View.VISIBLE);
     }
     private void fetch_element(){
+
         listkomentar = findViewById(R.id.listkomentar);
+
+        listkomentar.setVisibility(View.GONE);
+
         listkomentar.setOnRefreshListener(this);
         back = findViewById(R.id.back);
         titleappbar = findViewById(R.id.titleappbar);
@@ -101,6 +154,7 @@ public class ListComment extends AppCompatActivity implements RealmRecyclerView.
                     Intent i = new Intent(getApplicationContext(), MainAccount.class);
                     startActivity(i);
                 }else{
+                    kirim.setEnabled(false);
                     postKoment();
                 }
             }
@@ -109,6 +163,7 @@ public class ListComment extends AppCompatActivity implements RealmRecyclerView.
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                session.setCustomParams("reply", "nothing");
                 finish();
             }
         });
@@ -120,13 +175,21 @@ public class ListComment extends AppCompatActivity implements RealmRecyclerView.
             object.put("content", komentar.getText().toString());
             String url = "https://api.tnbg.news/api/comments";
             AttributeUtils attributeUtils = new AttributeUtils(getApplicationContext());
-            Boolean returns = attributeUtils.koment(url, object.toString());
-            if (returns){
+            String returns = attributeUtils.koment(url, object.toString());
+            if (returns.equalsIgnoreCase("Berhasil komen")){
                 /*insert berhasil*/
                 updateCommentNews(Integer.valueOf(idBerita));
             }else{
-                /*insert gagal*/
-                showSnackBar("Gagal mengirim komentar");
+                if (returns.equalsIgnoreCase("Token expired")){
+                    showSnackBar("Token Expired, Silakan Login ulang");
+                    session.setCustomParams("LOGINSTATES", "false");
+                    session.deleteSession();
+                    Intent i = new Intent(getApplicationContext(), MainAccount.class);
+                    startActivity(i);
+
+                }else{
+                    showSnackBar("Gagal mengirim komentar, Silakan ulangi lagi");
+                }
             }
             komentar.setText("");
         } catch (IOException | JSONException e) {
@@ -144,12 +207,17 @@ public class ListComment extends AppCompatActivity implements RealmRecyclerView.
         crudNewsModel.commitObject();
     }
     private void init_adapter(){
-//        Realm realm = Realm.getInstance(Realm.getDefaultConfiguration());
-//        RealmResults<KomentarModel> komenModel = crud.read("post_id", Integer.valueOf(idBerita));
         RealmResults komenModel = crud.read("post_id", Integer.valueOf(idBerita));
         komentarAdapter = new KomentarAdapter(getApplicationContext(), komenModel, true);
         listkomentar.setAdapter(komentarAdapter);
+        hideLoading();
     }
+
+    @Override
+    public void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+    }
+
     private Boolean reloadComment(){
         try {
             String endpoint = "http://api.tnbg.news/api/post/"+idBerita+"/comments?limit=100000&page=1";
@@ -164,7 +232,8 @@ public class ListComment extends AppCompatActivity implements RealmRecyclerView.
     private void showSnackBar(String message){
         new SnackBar(getApplicationContext()).view(findViewById(R.id.rlkoment))
                 .message(message)
-                .build(Gravity.BOTTOM)
+                .build(Gravity.TOP)
+                .listener(this)
                 .show();
     }
     private void reloadComments(){
@@ -172,20 +241,20 @@ public class ListComment extends AppCompatActivity implements RealmRecyclerView.
             String endpoint = "http://api.tnbg.news/api/post/"+idBerita+"/comments?limit=100000&page=1";
             AdapterModel adapterModel = new AdapterModel(getApplicationContext());
             Boolean returns = adapterModel.syncComment(endpoint);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    listkomentar.setRefreshing(false);
-                }
-            });
+            listkomentar.setRefreshing(false);
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                }
+//            });
         } catch (JSONException e) {
             e.printStackTrace();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    listkomentar.setRefreshing(false);
-                }
-            });
+            listkomentar.setRefreshing(false);
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                }
+//            });
         }
     }
 
@@ -214,6 +283,22 @@ public class ListComment extends AppCompatActivity implements RealmRecyclerView.
 
     @Override
     public void sessionChange() {
+        String reply = session.getCustomParams("reply", "nothing");
+        if (!reply.equalsIgnoreCase("nothing")){
+            komentar.setText("@"+reply+" ");
+            komentar.requestFocus();
+        }
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        session.setCustomParams("reply", "nothing");
+        finish();
+    }
+
+    @Override
+    public void onDismiss() {
+        kirim.setEnabled(true);
     }
 }

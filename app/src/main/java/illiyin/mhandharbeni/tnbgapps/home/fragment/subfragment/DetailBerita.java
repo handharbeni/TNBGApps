@@ -205,9 +205,6 @@ public class DetailBerita extends AppCompatActivity implements SessionListener {
                         startActivity(sendIntent);
                     }
                 });
-                Log.d(TAG, "fetch_data: "+from);
-                Log.d(TAG, "fetch_data: "+String.valueOf(newsResult.getChild()));
-                Log.d(TAG, "fetch_data: "+String.valueOf(newsResult.getId()));
                 if (from != null){
                     if (from.equalsIgnoreCase("child") && newsResult.getChild()>0){
                         fetch_child(newsResult.getId());

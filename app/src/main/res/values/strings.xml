@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TNBGApps</string>
+    <string name="app_name">TNBG News</string>
     <string name="placeholder_tanggal">Senin, 1 Agustus 2017 00.00 WIB</string>
     <string name="placeholder_title">Bapak Penjual Pulsa di Surabaya</string>
     <string name="placeholder_status">On Develop</string>
@@ -12,7 +12,7 @@
     <string name="placeholder_subscribe">Subscribe</string>
     <string name="placeholder_trending">#trending</string>
     <string name="placeholder_cariberita">Search News</string>
-    <string name="placeholder_kontak">Jika anda punya berita yang ingin di post atau berita yang ingin orang lain ketahui sebagai pelajaran, info atau lainnya. Silakan kirim email ke <p>lapor@tnbg.news</p><br/><br/>Untuk permasalahan mengenai website, <p>silakan email ke admin@tnbg.news</p></string>
+    <string name="placeholder_kontak">Test</string>
     <string name="placeholder_username">Username</string>
     <string name="placeholder_notelp">No Telepon</string>
     <string name="placeholder_oldpassword">Password Lama</string>

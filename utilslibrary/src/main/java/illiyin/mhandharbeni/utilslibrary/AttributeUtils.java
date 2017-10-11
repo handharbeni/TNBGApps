@@ -114,7 +114,7 @@ public class AttributeUtils implements SessionListener {
         }
         return responseString;
     }
-    public Boolean koment(String url, String json) throws IOException, JSONException {
+    public String koment(String url, String json) throws IOException, JSONException {
         OkHttpClient client = new OkHttpClient();
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, json);
@@ -127,7 +127,7 @@ public class AttributeUtils implements SessionListener {
                 .build();
         Response response = client.newCall(request).execute();
         String responseString = response.body().string();
-        Boolean postComments = postComment(responseString);
+        String postComments = postComment(responseString);
         return postComments;
     }
     public String changePassword(String url, String json) throws IOException {
@@ -180,7 +180,8 @@ public class AttributeUtils implements SessionListener {
         crud.commitObject();
         return true;
     }
-    private Boolean postComment(String json) throws JSONException {
+    private String postComment(String json) throws JSONException {
+        String returns;
         JSONObject objectResponse = new JSONObject(json);
         if (objectResponse.getBoolean("success")){
             JSONObject data = objectResponse.getJSONObject("data");
@@ -204,10 +205,15 @@ public class AttributeUtils implements SessionListener {
             km.setCreated_at(created_at);
             km.setId(id);
             crudKomentar.create(km);
-            return true;
+            returns = "Berhasil komen";
         }else{
-            return false;
+            if (objectResponse.getString("message").equalsIgnoreCase("Token has expired")){
+                returns = "Token expired";
+            }else{
+                returns = "Gagal menambahkan komen";
+            }
         }
+        return returns;
     }
     public String setActivation(String url, String json) throws IOException {
         OkHttpClient client = new OkHttpClient();

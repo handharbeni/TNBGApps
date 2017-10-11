@@ -90,7 +90,7 @@ public class HomeFragment extends Fragment implements RealmRecyclerView.OnRefres
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                new ReloadData().execute("https://api.tnbg.news/api/posts?limit=10&page=1");
+                new ReloadData().execute("https://api.tnbg.news/api/posts?limit=20&page=1");
             }
         });
     }

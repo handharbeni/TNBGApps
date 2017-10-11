@@ -211,10 +211,8 @@ public class AdapterModel implements SessionListener{
         String response = "";
         String login = session.getCustomParams("username", "nothing");
         if (login.equalsIgnoreCase("nothing")){
-            Log.d(TAG, "syncNewsPaging: Not Login");
             response = callHttp.get(url);
         }else{
-            Log.d(TAG, "syncNewsPaging: Login");
             response = getNews(url);
         }
         try {
@@ -229,7 +227,6 @@ public class AdapterModel implements SessionListener{
                             for (int i = 0; i < arrayData.length(); i++) {
 
                                 JSONObject itemNews = arrayData.getJSONObject(i);
-                                Log.d(TAG, "syncNewsPaging: "+String.valueOf(itemNews.getBoolean("liked")));
                                 RealmResults results = crudNews.read("id", itemNews.getInt("id"));
                                 if (results.size() > 0) {
                                     NewsModel checkModel = (NewsModel) results.get(0);
@@ -422,10 +419,11 @@ public class AdapterModel implements SessionListener{
         if (!login.equalsIgnoreCase("nothing")){
             NotifikasiModel notifikasiModel = new NotifikasiModel();
             Crud crud = new Crud(this.context, notifikasiModel);
-            String url = "http://api.tnbg.news/api/notifications";
+            String url = "https://api.tnbg.news/api/notifications";
             try {
                 String responses = getNotification(url);
                 JSONObject objectResponse = new JSONObject(responses);
+
                 if (objectResponse.getBoolean("success")){
                     JSONArray arrayResponse = objectResponse.getJSONArray("data");
                     if (arrayResponse.length() > 0){
@@ -446,6 +444,7 @@ public class AdapterModel implements SessionListener{
                                 NotifikasiModel nmResult = (NotifikasiModel) resulst.get(0);
                                 if (!updated_at.equalsIgnoreCase(nmResult.getUpdated_at())){
                                 /*update*/
+
                                     crud.openObject();
                                     nmResult.setUser_id(user_id);
                                     nmResult.setContent(content);
@@ -484,14 +483,12 @@ public class AdapterModel implements SessionListener{
 
     }
     public String getNotification(String url) throws IOException {
+
         OkHttpClient client = new OkHttpClient();
-        MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "");
         Request request = new Request.Builder()
                 .url(url)
-                .post(body)
+                .get()
                 .addHeader("cookie", "__cfduid=d89a508a0b4acae97f6e3b78192b948b41504498596")
-                .addHeader("content-type", "application/json")
                 .addHeader("authorization", "Bearer "+session.getCustomParams("token", ""))
                 .build();
         Response response = client.newCall(request).execute();

@@ -47,20 +47,8 @@ public class TrendFragment extends Fragment implements RealmRecyclerView.OnRefre
         init_adapter();
         return v;
     }
-    private void setDummyData(){
-        for (int i=0;i<9;i++){
-            if (!crud.checkDuplicate("id", i)){
-                TrendingModel trendingModel = new TrendingModel();
-                trendingModel.setId(i);
-                trendingModel.setName("Trending"+i);
-                trendingModel.setCount(i);
-                crud.create(trendingModel);
-            }
-        }
-    }
+
     private void init_adapter(){
-//        Realm realm = Realm.getInstance(Realm.getDefaultConfiguration());
-//        RealmResults<TrendingModel> rr = realm.where(TrendingModel.class).findAll();
         RealmResults rr = crud.readSorted("id", Sort.DESCENDING);
         trendingAdapter = new TrendingAdapter(getActivity().getApplicationContext(), rr, true);
         rvtrending.setAdapter(trendingAdapter);

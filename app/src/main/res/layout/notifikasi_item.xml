@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:baselineAligned="true"
+    android:orientation="horizontal" android:layout_width="match_parent" android:id="@+id/mainitem"
+    android:layout_height="wrap_content" android:background="@color/textWhite">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:baselineAligned="true"
+        android:orientation="horizontal" android:layout_width="match_parent" android:id="@+id/parentlinear"
+        android:layout_height="wrap_content" android:weightSum="3" android:padding="@dimen/paddingitem">
+        <LinearLayout
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="16sp"
+                android:padding="@dimen/paddingtitle"
+                android:text="test artikel"
+                android:textColor="@color/textBlack"
+                android:id="@+id/artikel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="75dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_arrow_right" />
+        </RelativeLayout>
+    </LinearLayout>
+    <View
+        android:layout_below="@+id/parentlinear"
+        android:background="@color/greyBorder"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"/>
+</RelativeLayout>

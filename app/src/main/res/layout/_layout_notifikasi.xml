@@ -5,6 +5,7 @@
     app:rrvEmptyLayoutId="@layout/notifikasi_empty"
     app:rrvIsRefreshable="true"
     app:rrvLayoutType="LinearLayout"
+    android:id="@+id/listnotifikasi"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:background="@color/textWhite"

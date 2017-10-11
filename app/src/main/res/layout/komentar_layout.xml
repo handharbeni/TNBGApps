@@ -4,11 +4,34 @@
     android:id="@+id/rlkoment"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <include layout="@layout/detailberita_appbar"
         android:id="@+id/include" />
-
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:layout_below="@+id/include"
+        android:layout_above="@+id/inputkomentar"
+        android:visibility="visible"
+        android:id="@+id/shimmer_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include layout="@layout/preloader_comment"/>
+            <include layout="@layout/preloader_comment"/>
+            <include layout="@layout/preloader_comment"/>
+            <include layout="@layout/preloader_comment"/>
+            <include layout="@layout/preloader_comment"/>
+            <include layout="@layout/preloader_comment"/>
+            <include layout="@layout/preloader_comment"/>
+            <include layout="@layout/preloader_comment"/>
+            <include layout="@layout/preloader_comment"/>
+            <include layout="@layout/preloader_comment"/>
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
     <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
+        android:visibility="gone"
         app:rrvEmptyLayoutId="@layout/komentar_empty"
         app:rrvIsRefreshable="true"
         app:rrvLayoutType="LinearLayout"

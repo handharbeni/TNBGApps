@@ -128,9 +128,7 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
         myViewHolder.iconlike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: "+myViewHolder.text_like.getText().toString());
                 try {
-
                     String login = session.getCustomParams("username", "nothing");
                     if (!login.equalsIgnoreCase("nothing")){
                         JSONObject jsonObject = new JSONObject();
@@ -152,8 +150,16 @@ public class HomeAdapter extends RealmBasedRecyclerViewAdapter<NewsModel, HomeAd
                                 Glide.with(getContext()).load("").placeholder(R.drawable.like).into(myViewHolder.like);
                             }
                             myViewHolder.text_like.setText(String.valueOf(likeCount)+"  "+getContext().getApplicationContext().getString(R.string.like));
+                        }else{
+                            if (jsonResponse.getString("message").equalsIgnoreCase("Token has expired")){
+                                Intent i = new Intent(getContext(), MainAccount.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                getContext().startActivity(i);
+                            }
                         }
                     }else{
+                        session.setCustomParams("LOGINSTATES", "false");
+                        session.deleteSession();
                         Intent i = new Intent(getContext(), MainAccount.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         getContext().startActivity(i);
