@@ -107,97 +107,99 @@ public class AdapterModel implements SessionListener{
         }else{
             response = getChild(url);
         }
-        if (!response.equalsIgnoreCase("")){
-            JSONObject objectResponse = new JSONObject(response);
-            if (objectResponse.getBoolean("success")){
-                JSONArray arrayData = objectResponse.getJSONArray("data");
-                if (arrayData.length() > 0){
-                    for (int i=0;i<arrayData.length();i++){
-                        JSONObject objectData = arrayData.getJSONObject(i);
-                        int id = objectData.getInt("id");
-                        String title = objectData.getString("title");
-                        String slug = objectData.getString("slug");
-                        String sort = objectData.getString("sort");
-                        String content = objectData.getString("content");
-                        String excerpt = objectData.getString("excerpt");
-                        int comment_status = objectData.getInt("comment_status");
-                        int publish = objectData.getInt("publish");
-                        int comment_count = objectData.getInt("comment_count");
-                        String hashtag = objectData.getString("hashtag");
+        if (response != null){
+            if (!response.equalsIgnoreCase("")){
+                JSONObject objectResponse = new JSONObject(response);
+                if (objectResponse.getBoolean("success")){
+                    JSONArray arrayData = objectResponse.getJSONArray("data");
+                    if (arrayData.length() > 0){
+                        for (int i=0;i<arrayData.length();i++){
+                            JSONObject objectData = arrayData.getJSONObject(i);
+                            int id = objectData.getInt("id");
+                            String title = objectData.getString("title");
+                            String slug = objectData.getString("slug");
+                            String sort = objectData.getString("sort");
+                            String content = objectData.getString("content");
+                            String excerpt = objectData.getString("excerpt");
+                            int comment_status = objectData.getInt("comment_status");
+                            int publish = objectData.getInt("publish");
+                            int comment_count = objectData.getInt("comment_count");
+                            String hashtag = objectData.getString("hashtag");
 //                        int tags = objectData.getInt("tags");
-                        int like_count = objectData.getInt("like_count");
-                        int status = objectData.getInt("status");
-                        int child = objectData.getInt("child");
+                            int like_count = objectData.getInt("like_count");
+                            int status = objectData.getInt("status");
+                            int child = objectData.getInt("child");
 //                        int categories = objectData.getInt("categories");
-                        Boolean liked = objectData.getBoolean("liked");
-                        Boolean subscribe = objectData.getBoolean("subscribe");
-                        String medias;
-                        JSONArray arrayMedia = objectData.getJSONArray("medias");
-                        if (arrayMedia.length() > 0) {
-                            JSONObject objectMedia = arrayMedia.getJSONObject(0);
-                            medias = "https://" + objectMedia.getString("src").replace("\\", "").replaceAll("//cdn", "cdn");
-                        }else{
-                            medias = "nothing";
-                        }
-                        String created_at = objectData.getString("created_at");
-                        String published_at = objectData.getString("published_at");
-                        String updated_at = objectData.getString("updated_at");
-                        if (crudChildModel.checkDuplicate("id", id)){
-                            RealmResults results = crudChildModel.read("id", id);
-                            if (results.size() > 0){
-                                ChildModel cmresult = (ChildModel) results.get(0);
-                                if (!updated_at.equalsIgnoreCase(cmresult.getUpdated_at())){
-                                    Log.d(TAG, "fetchChild: Insert "+String.valueOf(post_id));
-                                    Log.d(TAG, "fetchChild: Update "+title);
-                                    /* update */
-                                    crudChildModel.openObject();
-                                    cmresult.setId(id);
-                                    cmresult.setPost_id(post_id);
-                                    cmresult.setTitle(title);
-                                    cmresult.setSlug(slug);
-                                    cmresult.setSort(sort);
-                                    cmresult.setContent(content);
-                                    cmresult.setExcerpt(excerpt);
-                                    cmresult.setComment_status(comment_status);
-                                    cmresult.setPublich(publish);
-                                    cmresult.setComment_count(comment_count);
-                                    cmresult.setHashtag(hashtag);
-                                    cmresult.setLike_count(like_count);
-                                    cmresult.setStatus(status);
-                                    cmresult.setChild(child);
-                                    cmresult.setLiked(liked);
-                                    cmresult.setSubscribe(subscribe);
-                                    cmresult.setMedias(medias);
-                                    cmresult.setCreated_at(created_at);
-                                    cmresult.setPublished_at(published_at);
-                                    cmresult.setUpdated_at(updated_at);
-                                    crudChildModel.update(cmresult);
-                                    crudChildModel.commitObject();
-                                }
+                            Boolean liked = objectData.getBoolean("liked");
+                            Boolean subscribe = objectData.getBoolean("subscribe");
+                            String medias;
+                            JSONArray arrayMedia = objectData.getJSONArray("medias");
+                            if (arrayMedia.length() > 0) {
+                                JSONObject objectMedia = arrayMedia.getJSONObject(0);
+                                medias = "https://" + objectMedia.getString("src").replace("\\", "").replaceAll("//cdn", "cdn");
+                            }else{
+                                medias = "nothing";
                             }
-                        }else{
-                            ChildModel cm = new ChildModel();
-                            cm.setId(id);
-                            cm.setPost_id(post_id);
-                            cm.setTitle(title);
-                            cm.setSlug(slug);
-                            cm.setSort(sort);
-                            cm.setContent(content);
-                            cm.setExcerpt(excerpt);
-                            cm.setComment_status(comment_status);
-                            cm.setPublich(publish);
-                            cm.setComment_count(comment_count);
-                            cm.setHashtag(hashtag);
-                            cm.setLike_count(like_count);
-                            cm.setStatus(status);
-                            cm.setChild(child);
-                            cm.setLiked(liked);
-                            cm.setSubscribe(subscribe);
-                            cm.setMedias(medias);
-                            cm.setCreated_at(created_at);
-                            cm.setPublished_at(published_at);
-                            cm.setUpdated_at(updated_at);
-                            crudChildModel.create(cm);
+                            String created_at = objectData.getString("created_at");
+                            String published_at = objectData.getString("published_at");
+                            String updated_at = objectData.getString("updated_at");
+                            if (crudChildModel.checkDuplicate("id", id)){
+                                RealmResults results = crudChildModel.read("id", id);
+                                if (results.size() > 0){
+                                    ChildModel cmresult = (ChildModel) results.get(0);
+                                    if (!updated_at.equalsIgnoreCase(cmresult.getUpdated_at())){
+                                        Log.d(TAG, "fetchChild: Insert "+String.valueOf(post_id));
+                                        Log.d(TAG, "fetchChild: Update "+title);
+                                    /* update */
+                                        crudChildModel.openObject();
+                                        cmresult.setId(id);
+                                        cmresult.setPost_id(post_id);
+                                        cmresult.setTitle(title);
+                                        cmresult.setSlug(slug);
+                                        cmresult.setSort(sort);
+                                        cmresult.setContent(content);
+                                        cmresult.setExcerpt(excerpt);
+                                        cmresult.setComment_status(comment_status);
+                                        cmresult.setPublich(publish);
+                                        cmresult.setComment_count(comment_count);
+                                        cmresult.setHashtag(hashtag);
+                                        cmresult.setLike_count(like_count);
+                                        cmresult.setStatus(status);
+                                        cmresult.setChild(child);
+                                        cmresult.setLiked(liked);
+                                        cmresult.setSubscribe(subscribe);
+                                        cmresult.setMedias(medias);
+                                        cmresult.setCreated_at(created_at);
+                                        cmresult.setPublished_at(published_at);
+                                        cmresult.setUpdated_at(updated_at);
+                                        crudChildModel.update(cmresult);
+                                        crudChildModel.commitObject();
+                                    }
+                                }
+                            }else{
+                                ChildModel cm = new ChildModel();
+                                cm.setId(id);
+                                cm.setPost_id(post_id);
+                                cm.setTitle(title);
+                                cm.setSlug(slug);
+                                cm.setSort(sort);
+                                cm.setContent(content);
+                                cm.setExcerpt(excerpt);
+                                cm.setComment_status(comment_status);
+                                cm.setPublich(publish);
+                                cm.setComment_count(comment_count);
+                                cm.setHashtag(hashtag);
+                                cm.setLike_count(like_count);
+                                cm.setStatus(status);
+                                cm.setChild(child);
+                                cm.setLiked(liked);
+                                cm.setSubscribe(subscribe);
+                                cm.setMedias(medias);
+                                cm.setCreated_at(created_at);
+                                cm.setPublished_at(published_at);
+                                cm.setUpdated_at(updated_at);
+                                crudChildModel.create(cm);
+                            }
                         }
                     }
                 }
@@ -307,37 +309,44 @@ public class AdapterModel implements SessionListener{
     public Boolean syncTrending(String url){
         TrendingModel trendingModel = new TrendingModel();
 
-        Crud crud = new Crud(context, trendingModel);
-        crud.deleteAll(TrendingModel.class);
-        crud.closeRealm();
+//        Crud crud = new Crud(context, trendingModel);
+//        crud.deleteAll(TrendingModel.class);
+//        crud.closeRealm();
 
         TrendingModel trendingModels = new TrendingModel();
         Crud cruds = new Crud(context, trendingModels);
         String response = callHttp.get(url);
-        try {
-            JSONObject jsonResponse = new JSONObject(response);
-            Boolean success = jsonResponse.getBoolean("success");
-            if (success){
-                JSONArray dataArray = jsonResponse.getJSONArray("data");
-                if (dataArray.length() > 0){
-                    for (int i = 0; i < dataArray.length(); i++){
-                        JSONObject objectArray = dataArray.getJSONObject(i);
-                        TrendingModel tm = new TrendingModel();
-                        tm.setId(objectArray.getInt("id"));
-                        tm.setTag_group_id(objectArray.getString("tag_group_id"));
-                        tm.setSlug(objectArray.getString("slug"));
-                        tm.setName(objectArray.getString("name"));
-                        tm.setSuggest(objectArray.getInt("suggest"));
-                        tm.setCount(objectArray.getInt("count"));
-                        tm.setCreated_at(objectArray.getString("created_at"));
-                        tm.setUpdated_at(objectArray.getString("updated_at"));
-                        cruds.create(tm);
+        if (response != null){
+            try {
+                JSONObject jsonResponse = new JSONObject(response);
+                Boolean success = jsonResponse.getBoolean("success");
+                if (success){
+                    JSONArray dataArray = jsonResponse.getJSONArray("data");
+                    if (dataArray.length() > 0){
+                        for (int i = 0; i < dataArray.length(); i++){
+                            JSONObject objectArray = dataArray.getJSONObject(i);
+                            TrendingModel tms = new TrendingModel();
+                            Crud newCrud = new Crud(context, tms);
+                            if (!newCrud.checkDuplicate("id", objectArray.getInt("id"))){
+                                TrendingModel tm = new TrendingModel();
+                                tm.setId(objectArray.getInt("id"));
+                                tm.setTag_group_id(objectArray.getString("tag_group_id"));
+                                tm.setSlug(objectArray.getString("slug"));
+                                tm.setName(objectArray.getString("name"));
+                                tm.setSuggest(objectArray.getInt("suggest"));
+                                tm.setCount(objectArray.getInt("count"));
+                                tm.setCreated_at(objectArray.getString("created_at"));
+                                tm.setUpdated_at(objectArray.getString("updated_at"));
+                                cruds.create(tm);
+                            }
+                            newCrud.closeRealm();
+                        }
                     }
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                cruds.closeRealm();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            cruds.closeRealm();
         }
         cruds.closeRealm();
         return true;
@@ -347,51 +356,30 @@ public class AdapterModel implements SessionListener{
 
         Crud crud = new Crud(context, komentarModel);
         String response = callHttp.get(url);
-        JSONObject jsonResponse = new JSONObject(response);
-        Boolean success = jsonResponse.getBoolean("success");
-        if (success){
-            JSONArray arrayResponse = jsonResponse.getJSONArray("data");
-            if (arrayResponse.length() > 0){
-                for (int i=0;i<arrayResponse.length();i++){
-                    JSONObject objectData = arrayResponse.getJSONObject(i);
-                    int id = objectData.getInt("id");
-                    int post_id = objectData.getInt("post_id");
-                    String comment_author = objectData.getString("comment_author");
-                    String comment_email = objectData.getString("comment_email");
-                    String comment_website = objectData.getString("comment_website");
-                    String comment_ip = objectData.getString("comment_ip");
-                    String flag = objectData.getString("flag");
-                    String content = objectData.getString("content");
-                    int approved = objectData.getInt("approved");
-                    int parent_id = objectData.getInt("parent_id");
-                    int user_id = objectData.getInt("user_id");
-                    String created_at = objectData.getString("created_at");
-                    String updated_at = objectData.getString("updated_at");
-                    Boolean checkDuplicate = crud.checkDuplicate("id", id);
-                    if (!checkDuplicate){
+        if (response != null){
+            JSONObject jsonResponse = new JSONObject(response);
+            Boolean success = jsonResponse.getBoolean("success");
+            if (success){
+                JSONArray arrayResponse = jsonResponse.getJSONArray("data");
+                if (arrayResponse.length() > 0){
+                    for (int i=0;i<arrayResponse.length();i++){
+                        JSONObject objectData = arrayResponse.getJSONObject(i);
+                        int id = objectData.getInt("id");
+                        int post_id = objectData.getInt("post_id");
+                        String comment_author = objectData.getString("comment_author");
+                        String comment_email = objectData.getString("comment_email");
+                        String comment_website = objectData.getString("comment_website");
+                        String comment_ip = objectData.getString("comment_ip");
+                        String flag = objectData.getString("flag");
+                        String content = objectData.getString("content");
+                        int approved = objectData.getInt("approved");
+                        int parent_id = objectData.getInt("parent_id");
+                        int user_id = objectData.getInt("user_id");
+                        String created_at = objectData.getString("created_at");
+                        String updated_at = objectData.getString("updated_at");
+                        Boolean checkDuplicate = crud.checkDuplicate("id", id);
+                        if (!checkDuplicate){
                         /*new komen*/
-                        KomentarModel km = new KomentarModel();
-                        km.setId(id);
-                        km.setPost_id(post_id);
-                        km.setComment_author(comment_author);
-                        km.setComment_email(comment_email);
-                        km.setComment_website(comment_website);
-                        km.setComment_ip(comment_ip);
-                        km.setFlag(flag);
-                        km.setContent(content);
-                        km.setApproved(approved);
-                        km.setParent_id(parent_id);
-                        km.setUser_id(user_id);
-                        km.setCreated_at(created_at);
-                        km.setUpdated_at(updated_at);
-                        crud.create(km);
-                    }else{
-                        /*update komen*/
-                        RealmResults result = crud.read("id", id);
-                        KomentarModel resultKomentar = (KomentarModel) result.get(0);
-                        String oldUpdate = resultKomentar.getUpdated_at();
-                        if (!oldUpdate.equalsIgnoreCase(updated_at)){
-                            crud.delete("id", id);
                             KomentarModel km = new KomentarModel();
                             km.setId(id);
                             km.setPost_id(post_id);
@@ -407,6 +395,29 @@ public class AdapterModel implements SessionListener{
                             km.setCreated_at(created_at);
                             km.setUpdated_at(updated_at);
                             crud.create(km);
+                        }else{
+                        /*update komen*/
+                            RealmResults result = crud.read("id", id);
+                            KomentarModel resultKomentar = (KomentarModel) result.get(0);
+                            String oldUpdate = resultKomentar.getUpdated_at();
+                            if (!oldUpdate.equalsIgnoreCase(updated_at)){
+                                crud.delete("id", id);
+                                KomentarModel km = new KomentarModel();
+                                km.setId(id);
+                                km.setPost_id(post_id);
+                                km.setComment_author(comment_author);
+                                km.setComment_email(comment_email);
+                                km.setComment_website(comment_website);
+                                km.setComment_ip(comment_ip);
+                                km.setFlag(flag);
+                                km.setContent(content);
+                                km.setApproved(approved);
+                                km.setParent_id(parent_id);
+                                km.setUser_id(user_id);
+                                km.setCreated_at(created_at);
+                                km.setUpdated_at(updated_at);
+                                crud.create(km);
+                            }
                         }
                     }
                 }

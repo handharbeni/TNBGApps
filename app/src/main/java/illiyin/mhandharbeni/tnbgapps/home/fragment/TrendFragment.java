@@ -17,7 +17,6 @@ import illiyin.mhandharbeni.realmlibrary.Crud;
 import illiyin.mhandharbeni.tnbgapps.R;
 import illiyin.mhandharbeni.tnbgapps.home.adapter.TrendingAdapter;
 import io.realm.RealmResults;
-import io.realm.Sort;
 
 /**
  * Created by root on 9/5/17.
@@ -49,8 +48,9 @@ public class TrendFragment extends Fragment implements RealmRecyclerView.OnRefre
     }
 
     private void init_adapter(){
-        RealmResults rr = crud.readSorted("id", Sort.DESCENDING);
-        trendingAdapter = new TrendingAdapter(getActivity().getApplicationContext(), rr, true);
+//        RealmResults rr = crud.readSorted("id", Sort.DESCENDING);
+        RealmResults rr = crud.read();
+        trendingAdapter = new TrendingAdapter(getActivity().getApplicationContext(), rr, false);
         rvtrending.setAdapter(trendingAdapter);
     }
     @Override
@@ -62,6 +62,8 @@ public class TrendFragment extends Fragment implements RealmRecyclerView.OnRefre
     @Override
     public void onResume() {
         super.onResume();
+        trendingModel = new TrendingModel();
+        crud = new Crud(getActivity().getApplicationContext(), trendingModel);
         init_adapter();
     }
 
@@ -91,9 +93,14 @@ public class TrendFragment extends Fragment implements RealmRecyclerView.OnRefre
                     @Override
                     public void run() {
                         rvtrending.setRefreshing(false);
+                        trendingModel = new TrendingModel();
+                        crud = new Crud(getActivity().getApplicationContext(), trendingModel);
+                        RealmResults results = crud.read();
+                        trendingAdapter.updateRealmResults(results);
                     }
                 });
             }
+//            trendingAdapter.notifyDataSetChanged();
             return returns;
         }
     }

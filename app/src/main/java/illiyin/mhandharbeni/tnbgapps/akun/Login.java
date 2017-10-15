@@ -2,6 +2,7 @@ package illiyin.mhandharbeni.tnbgapps.akun;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -42,6 +43,9 @@ public class Login extends Fragment implements SessionListener, SnackBarListener
     private AlertDialog.Builder alertDialog;
     private ProgressDialog dialog;
     private String from;
+
+    private TextView forgot;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = getArguments();
@@ -58,6 +62,14 @@ public class Login extends Fragment implements SessionListener, SnackBarListener
         password = v.findViewById(R.id.password);
         dosignout = v.findViewById(R.id.dosignout);
         signin = v.findViewById(R.id.signin);
+        forgot = v.findViewById(R.id.forgot);
+        forgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity().getApplicationContext(), ForgotPassword.class);
+                getActivity().startActivity(i);
+            }
+        });
 
         signin.setOnClickListener(new View.OnClickListener() {
             @Override

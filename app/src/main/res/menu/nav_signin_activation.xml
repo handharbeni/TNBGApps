@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/shape"
-            android:title="Home" />
+            android:title="Beranda" />
         <item
+            app:actionViewClass="@layout/badge_notification"
             android:id="@+id/nav_notifikasi"
             android:icon="@drawable/notifikasi"
             android:title="Notifikasi" />
@@ -23,14 +25,15 @@
             <item
                 android:id="@+id/nav_changepassword"
                 android:icon="@drawable/change_password"
-                android:title="Change Password" />
+                android:title="Ganti Password" />
             <item
                 android:id="@+id/nav_signout"
                 android:icon="@drawable/logout"
-                android:title="Logout" />
-            <item android:id="@+id/nav_activation"
+                android:title="Keluar" />
+            <item
+                android:id="@+id/nav_activation"
                 android:icon="@drawable/icon_aktivasi"
-                android:title="Account Activation"/>
+                android:title="Aktivasi Akun"/>
         </menu>
     </item>
 

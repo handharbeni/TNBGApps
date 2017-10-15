@@ -57,7 +57,7 @@ public class HomeMain extends Fragment implements TabLayout.OnTabSelectedListene
     @Override
     public void onResume() {
         super.onResume();
-        init_view();
+//        init_view();
     }
 
     @Override

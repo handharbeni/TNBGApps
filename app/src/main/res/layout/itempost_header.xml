@@ -18,7 +18,7 @@
         android:id="@+id/status"
         android:background="@drawable/roundcorner_onprogress"
         android:padding="@dimen/paddingtag"
-        android:text="@string/placeholder_status"
+        android:text="@string/placeholder_onprogress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </RelativeLayout>

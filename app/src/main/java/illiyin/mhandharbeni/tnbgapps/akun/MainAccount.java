@@ -43,7 +43,7 @@ public class MainAccount extends AppCompatActivity {
                 finish();
             }
         });
-        titleappbar.setText("You Must Login");
+        titleappbar.setText("Anda Harus Login");
     }
     private void change_fragment(Fragment fragment){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

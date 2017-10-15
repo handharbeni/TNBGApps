@@ -52,11 +52,11 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         String title = null;
         if (position == 0)
         {
-            title = "Home";
+            title = "Beranda";
         }
         else if (position == 1)
         {
-            title = "Trend";
+            title = "Tren";
         }
         else if (position == 2)
         {

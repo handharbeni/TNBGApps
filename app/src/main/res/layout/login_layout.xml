@@ -38,5 +38,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/placeholder_signoutnow"/>
+        <TextView
+            android:id="@+id/forgot"
+            android:paddingTop="@dimen/paddingitem"
+            android:paddingBottom="@dimen/paddingitem"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lupa Password? Reset disini"/>
     </LinearLayout>
 </RelativeLayout>

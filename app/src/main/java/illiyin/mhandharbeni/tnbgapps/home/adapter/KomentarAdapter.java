@@ -43,6 +43,9 @@ public class KomentarAdapter extends RealmBasedRecyclerViewAdapter<KomentarModel
         final KomentarModel m = realmResults.get(i);
         myViewHolder.nama.setText(m.getComment_author());
         myViewHolder.komen.setText(m.getContent());
+        if (m.getComment_author().equalsIgnoreCase(session.getCustomParams("username", "nothing"))){
+            myViewHolder.reply.setVisibility(View.GONE);
+        }
         myViewHolder.reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

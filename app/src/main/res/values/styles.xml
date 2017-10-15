@@ -69,4 +69,9 @@
 <!--        <item name="queryBackground">...</item>
         <item name="submitBackground">...</item>-->
     </style>
+    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/red_500</item>
+        <item name="android:textColorPrimary">@color/textBlack</item>
+        <!--<item name="android:background">#5fa3d0</item>-->
+    </style>
 </resources>

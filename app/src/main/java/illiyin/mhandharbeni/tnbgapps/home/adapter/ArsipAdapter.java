@@ -53,14 +53,15 @@ public class ArsipAdapter  extends RecyclerView.Adapter<ArsipAdapter.MyViewHolde
         h.title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(mContext, DetailBerita.class);
+                Intent i = new Intent(h.title.getContext(), DetailBerita.class);
                 i.putExtra("idBerita", String.valueOf(m.getId()));
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(i);
+                h.title.getContext().startActivity(i);
             }
         });
         Glide.with(mContext)
                 .load(m.getMedias()+"?size=512x512")
+                .placeholder(R.drawable.ic_launcher)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(false)
                 .priority(Priority.HIGH)

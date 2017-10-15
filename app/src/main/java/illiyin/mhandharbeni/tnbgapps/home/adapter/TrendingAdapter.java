@@ -24,7 +24,7 @@ public class TrendingAdapter extends RealmBasedRecyclerViewAdapter<TrendingModel
 
     public TrendingAdapter(Context context, RealmResults<TrendingModel> realmResults, boolean automaticUpdate) {
         super(context, realmResults, automaticUpdate, false);
-
+        setHasStableIds(true);
     }
 
     public class ViewHolder extends RealmViewHolder {
@@ -46,17 +46,17 @@ public class TrendingAdapter extends RealmBasedRecyclerViewAdapter<TrendingModel
     }
 
     @Override
-    public void onBindRealmViewHolder(TrendingAdapter.ViewHolder myViewHolder, int i) {
+    public void onBindRealmViewHolder(final TrendingAdapter.ViewHolder myViewHolder, int i) {
         final TrendingModel trendingModel = realmResults.get(i);
         myViewHolder.trending.setText("#"+trendingModel.getName());
         myViewHolder.penggunatrending.setText(trendingModel.getCount()+" Pengguna");
         myViewHolder.layouttrending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), SearchClass.class);
+                Intent intent = new Intent(myViewHolder.layouttrending.getContext(), SearchClass.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("trending", trendingModel.getName());
-                getContext().startActivity(intent);
+                myViewHolder.layouttrending.getContext().startActivity(intent);
             }
         });
     }

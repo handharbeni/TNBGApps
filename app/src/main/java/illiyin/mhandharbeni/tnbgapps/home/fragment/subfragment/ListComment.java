@@ -242,19 +242,9 @@ public class ListComment extends AppCompatActivity implements RealmRecyclerView.
             AdapterModel adapterModel = new AdapterModel(getApplicationContext());
             Boolean returns = adapterModel.syncComment(endpoint);
             listkomentar.setRefreshing(false);
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                }
-//            });
         } catch (JSONException e) {
             e.printStackTrace();
             listkomentar.setRefreshing(false);
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                }
-//            });
         }
     }
 

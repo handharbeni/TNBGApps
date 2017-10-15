@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -22,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import illiyin.mhandharbeni.databasemodule.NotifikasiModel;
 import illiyin.mhandharbeni.realmlibrary.Crud;
@@ -35,6 +37,7 @@ import illiyin.mhandharbeni.tnbgapps.home.HomeMain;
 import illiyin.mhandharbeni.tnbgapps.kontak.MainKontak;
 import illiyin.mhandharbeni.tnbgapps.notifikasi.MainNotifikasi;
 import illiyin.mhandharbeni.tnbgapps.search.SearchMain;
+import io.realm.RealmResults;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener, SessionListener {
@@ -45,7 +48,11 @@ public class NavigationActivity extends AppCompatActivity
     private SearchView searchView;
     private Menu menuSearchView;
     private TextView headertitle, headersub;
+    private TextView txtNotifikasi;
+    private TextView mCounter;
 
+    private NotifikasiModel notifikasiModel;
+    private Crud crudNotifikasi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,9 +75,6 @@ public class NavigationActivity extends AppCompatActivity
                     permissions,
                     5
             );
-//            Window w = getWindow();
-//            w.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-//            w.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
 
 
@@ -83,18 +87,26 @@ public class NavigationActivity extends AppCompatActivity
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         init_serviceadapter();
+
+        notifikasiModel = new NotifikasiModel();
+        crudNotifikasi = new Crud(getApplicationContext(), notifikasiModel);
+
         setContentView(R.layout.activity_navigation);
 
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        final ActionBar ab = getSupportActionBar();
+        ab.setHomeAsUpIndicator(R.drawable.ic_menu_grey);
+        ab.setDisplayHomeAsUpEnabled(false);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        hideBadge(false);
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -104,10 +116,36 @@ public class NavigationActivity extends AppCompatActivity
         session = new Session(getApplicationContext(), this);
         session.setCustomParams("LastFragment", "home");
         setNavigation();
+        hideBadge(true);
+    }
+    private void hideBadge(Boolean hide) {
+        if (hide){
+            findViewById(R.id.tv_nav_drawer_count).setVisibility(View.GONE);
+        }else{
+            findViewById(R.id.tv_nav_drawer_count).setVisibility(View.VISIBLE);
+        }
+    }
+    private void checkNotification(){
+        RealmResults results = crudNotifikasi.read("read", 0);
+        if (results.size() > 0){
+            hideBadge(false);
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.nav_signin_badgevisible);
+        }else{
+            hideBadge(true);
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.nav_signin);
+        }
     }
     private void setNavigation(){
         String login = session.getCustomParams("username", "nothing");
-        if (!login.equalsIgnoreCase("nothing")){
+        if (login.equalsIgnoreCase("nothing")){
+            headersub.setVisibility(View.VISIBLE);
+            headertitle.setText(getString(R.string.app_name));
+            headersub.setVisibility(View.GONE);
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.nav_signout);
+        }else{
             headersub.setVisibility(View.VISIBLE);
             headertitle.setText(session.getCustomParams("username", "NOTHING"));
             headersub.setText(session.getCustomParams("email", "-"));
@@ -115,15 +153,8 @@ public class NavigationActivity extends AppCompatActivity
                 navigationView.getMenu().clear();
                 navigationView.inflateMenu(R.menu.nav_signin_activation);
             }else{
-                navigationView.getMenu().clear();
-                navigationView.inflateMenu(R.menu.nav_signin);
+                checkNotification();
             }
-        }else{
-            headersub.setVisibility(View.VISIBLE);
-            headertitle.setText(getString(R.string.app_name));
-            headersub.setVisibility(View.GONE);
-            navigationView.getMenu().clear();
-            navigationView.inflateMenu(R.menu.nav_signout);
         }
         setFirstItemNavigationView();
     }
@@ -162,7 +193,6 @@ public class NavigationActivity extends AppCompatActivity
                 searchLayout();
             }
         });
-
         return true;
     }
 
@@ -177,6 +207,7 @@ public class NavigationActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+//        checkNotification();
         int id = item.getItemId();
         if (id == R.id.nav_home){
             Fragment fragment = new HomeMain();
@@ -245,6 +276,7 @@ public class NavigationActivity extends AppCompatActivity
         }
     }
     private void changeFragment(Fragment fragment, Boolean backStack, String name){
+//        checkNotification();
         Fragment lastFragment = getSupportFragmentManager().findFragmentByTag("FragmentMain");
         if (lastFragment != null){
             getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
@@ -290,7 +322,12 @@ public class NavigationActivity extends AppCompatActivity
     @Override
     public void sessionChange() {
         String login = session.getCustomParams("username", "nothing");
-        if (!login.equalsIgnoreCase("nothing")){
+        if (login.equalsIgnoreCase("nothing")){
+            headertitle.setText(getString(R.string.app_name));
+            headersub.setVisibility(View.GONE);
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.nav_signout);
+        }else{
             headersub.setVisibility(View.VISIBLE);
             headertitle.setText(session.getCustomParams("username", "NOTHING"));
             headersub.setText(session.getCustomParams("email", "-"));
@@ -298,14 +335,8 @@ public class NavigationActivity extends AppCompatActivity
                 navigationView.getMenu().clear();
                 navigationView.inflateMenu(R.menu.nav_signin_activation);
             }else{
-                navigationView.getMenu().clear();
-                navigationView.inflateMenu(R.menu.nav_signin);
+                checkNotification();
             }
-        }else{
-            headertitle.setText(getString(R.string.app_name));
-            headersub.setVisibility(View.GONE);
-            navigationView.getMenu().clear();
-            navigationView.inflateMenu(R.menu.nav_signout);
         }
     }
     private Boolean hideNavActivation(){

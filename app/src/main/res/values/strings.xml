@@ -5,22 +5,22 @@
     <string name="placeholder_status">On Develop</string>
     <string name="placeholder_frontcontent">Seorang follower mengirimkan DM dan melaporkan  ahwa ia menemukan seorang bapak penjual pulsa. Bapak tersebut memiliki keterbatasan, namun dia tetap semangat dalam mencari rejeki dengan berjualan</string>
     <string name="placeholder_backcontent">Sejak kasus pelecehan seksual yang terjadi pada anaknya. Ibu M kerap kali menerima banyak intimidasi, terror,fitnahan bahkan ia sampai dinyatakan ingin mencari sensasi dengan memblow up kasus anaknya yang telah dinodai oleh seorang PNS, Sejak kasus pelecehan seksual yang terjadi pada anaknya. Ibu M kerap kali menerima banyak intimidasi, terror,fitnahan bahkan ia sampai dinyatakan ingin mencari sensasi dengan memblow up kasus anaknya yang telah dinodai oleh seorang PNS</string>
-    <string name="placeholder_comment">Comment</string>
-    <string name="placeholder_like">Like</string>
-    <string name="placeholder_onprogress">On Progress</string>
-    <string name="placeholder_oncomplete">Complete</string>
-    <string name="placeholder_subscribe">Subscribe</string>
+    <string name="placeholder_comment">Komentar</string>
+    <string name="placeholder_like">Suka</string>
+    <string name="placeholder_onprogress">Sedang Proses</string>
+    <string name="placeholder_oncomplete">Selesai</string>
+    <string name="placeholder_subscribe">Berlangganan</string>
     <string name="placeholder_trending">#trending</string>
-    <string name="placeholder_cariberita">Search News</string>
+    <string name="placeholder_cariberita">Cari Berita</string>
     <string name="placeholder_kontak">Test</string>
-    <string name="placeholder_username">Username</string>
+    <string name="placeholder_username">Nama User</string>
     <string name="placeholder_notelp">No Telepon</string>
-    <string name="placeholder_oldpassword">Password Lama</string>
-    <string name="placeholder_password">Password</string>
+    <string name="placeholder_oldpassword">Kata Sandi Lama</string>
+    <string name="placeholder_password">Kata Sandi</string>
     <string name="placeholder_changepassword">Ganti Password</string>
     <string name="placeholder_repeatpassword">Ulangi Password</string>
     <string name="placeholder_signoutnow">Tidak punya akun? Daftar Disini</string>
-    <string name="placeholder_signinnow">Sudah punya akun? Login Disini</string>
+    <string name="placeholder_signinnow">Sudah punya akun? Masuk Disini</string>
     <string name="placeholder_signin">Masuk</string>
     <string name="placeholder_signout">Daftar</string>
 
@@ -29,18 +29,18 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
-    <string name="action_search">Search</string>
+    <string name="action_settings">Pengaturan</string>
+    <string name="action_search">Cari</string>
 
-    <string name="comment">Comment</string>
-    <string name="like">Like</string>
-    <string name="subscribe">Subscribe</string>
+    <string name="comment">Komentar</string>
+    <string name="like">Suka</string>
+    <string name="subscribe">Berlangganan</string>
     <string name="placeholder_kirim">Kirim</string>
     <string name="placeholder_komentar">Tulis Komentar</string>
-    <string name="placeholder_activation">Activation Code</string>
-    <string name="placeholder_doactivated">Submit</string>
-    <string name="placeholder_share">Share</string>
-    <string name="placeholder_progress">Progress</string>
+    <string name="placeholder_activation">Kode Aktivasi</string>
+    <string name="placeholder_doactivated">Kirim</string>
+    <string name="placeholder_share">Bagikan</string>
+    <string name="placeholder_progress">Proses</string>
     <string name="placeholder_updatebaru">Update Terbaru</string>
 
 </resources>

@@ -69,7 +69,6 @@ public class Register extends Fragment implements SessionListener, SnackBarListe
         return v;
     }
     public void do_register(){
-        signout.setEnabled(false);
         if (username.getText().toString().isEmpty()){
             username.setError("Username Tidak Boleh Kosong");
         }else if (notelp.getText().toString().isEmpty()){
@@ -81,6 +80,7 @@ public class Register extends Fragment implements SessionListener, SnackBarListe
         }else{
             if (password.getText().toString().equalsIgnoreCase(repeatpassword.getText().toString())){
                 try {
+                    signout.setEnabled(false);
                     session.setCustomParams("LOGINSTATE", false);
                     sentToServer();
                 } catch (JSONException e) {

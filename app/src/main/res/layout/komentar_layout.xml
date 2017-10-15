@@ -23,11 +23,6 @@
             <include layout="@layout/preloader_comment"/>
             <include layout="@layout/preloader_comment"/>
             <include layout="@layout/preloader_comment"/>
-            <include layout="@layout/preloader_comment"/>
-            <include layout="@layout/preloader_comment"/>
-            <include layout="@layout/preloader_comment"/>
-            <include layout="@layout/preloader_comment"/>
-            <include layout="@layout/preloader_comment"/>
         </LinearLayout>
     </com.facebook.shimmer.ShimmerFrameLayout>
     <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView

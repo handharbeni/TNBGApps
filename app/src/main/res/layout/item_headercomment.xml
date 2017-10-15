@@ -20,7 +20,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:padding="@dimen/paddingtitle"
-        android:text="reply"
+        android:text="balas"
         android:textColor="@color/blueCustom"
         android:textSize="16sp"
         android:textStyle="bold" />

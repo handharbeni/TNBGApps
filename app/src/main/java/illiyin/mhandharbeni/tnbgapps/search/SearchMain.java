@@ -58,7 +58,7 @@ public class SearchMain extends Fragment implements SessionListener {
     private void showResult(){
         if (!from.equalsIgnoreCase("nav")){
             String queryString = session.getCustomParams("Query", "nothing");
-            upateTemp("tags",queryString);
+            upateTemp("hashtag",queryString);
         }
     }
     private void fetch_element(){
