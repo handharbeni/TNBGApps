@@ -62,7 +62,7 @@ public class AdapterModel implements SessionListener{
                     JSONObject objectMeta = responseObject.getJSONObject("meta");
                     int currentPage = objectMeta.getInt("current_page");
                     int totalPage = objectMeta.getInt("last_page");
-                    for (int i=currentPage+1;i<=totalPage;i++){
+                    for (int i=1;i<=totalPage;i++){
                         String url = "https://api.tnbg.news/api/posts?limit=5&page="+i;
                         syncNewsPaging(url);
                     }
@@ -148,8 +148,6 @@ public class AdapterModel implements SessionListener{
                                 if (results.size() > 0){
                                     ChildModel cmresult = (ChildModel) results.get(0);
                                     if (!updated_at.equalsIgnoreCase(cmresult.getUpdated_at())){
-                                        Log.d(TAG, "fetchChild: Insert "+String.valueOf(post_id));
-                                        Log.d(TAG, "fetchChild: Update "+title);
                                     /* update */
                                         crudChildModel.openObject();
                                         cmresult.setId(id);
