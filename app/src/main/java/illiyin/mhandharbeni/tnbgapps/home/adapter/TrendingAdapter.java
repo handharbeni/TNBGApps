@@ -53,10 +53,10 @@ public class TrendingAdapter extends RealmBasedRecyclerViewAdapter<TrendingModel
         myViewHolder.layouttrending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(myViewHolder.layouttrending.getContext(), SearchClass.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent = new Intent(getContext(), SearchClass.class);
                 intent.putExtra("trending", trendingModel.getName());
-                myViewHolder.layouttrending.getContext().startActivity(intent);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(intent);
             }
         });
     }

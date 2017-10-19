@@ -317,9 +317,7 @@ public class DetailBerita extends AppCompatActivity implements SessionListener {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             onBackPressed();
-
         }
-
         return super.onKeyDown(keyCode, event);
     }
 
